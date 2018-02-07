@@ -1,0 +1,6 @@
+V3 3
+FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd 2018/02/01.12:40:01 O.87xd
+EN work/ALU 1517517606 FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd \
+      PB ieee/std_logic_1164 1325952872 PB ieee/NUMERIC_STD 1325952877
+AR work/ALU/Behavioral 1517517607 \
+      FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd EN work/ALU 1517517606
