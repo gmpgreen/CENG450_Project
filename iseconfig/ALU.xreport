@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2018-02-01T12:37:55</DateModified>
+  <DateModified>2018-02-07T19:25:04</DateModified>
   <ModuleName>ALU</ModuleName>
   <SummaryTimeStamp>2018-02-01T12:09:02</SummaryTimeStamp>
   <SavedFilePath>C:/Users/lymacasm/RegFile_ALU/iseconfig/ALU.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>C:/Users/lymacasm/RegFile_ALU</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>C:/Users/lymacasm/RegFile_ALU\</ImplementationReportsDirectory>
   <DateInitialized>2018-02-01T12:25:23</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

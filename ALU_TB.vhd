@@ -96,24 +96,23 @@ BEGIN
    stim_proc: process
    begin		
       -- hold reset state for 100 ns.
-      wait for 100 ns;	
 
       wait for clk_period*10;
 
       -- insert stimulus here
 		wait for clk_period;
-		alu_mode <= "001";
-		wait for clk_period;
-		in1 <= x"1010";
-		wait for clk_period;
-		in2 <= x"0101";
-		
-		wait for clk_period;
-		alu_mode <= "010";
-		wait for clk_period;
-		in1 <= x"1010";
-		wait for clk_period;
-		in2 <= x"1010";
+		alu_mode <= "101";
+		in1 <= x"1111";
+		in2 <= x"0001";
+		wait for clk_period*3;
+		in2 <= x"0002";
+		wait for clk_period*3;
+		in2 <= x"0004";
+		wait for clk_period*3;
+		in2 <= x"0008";
+		wait for clk_period*3;
+		in1 <= x"FFFF";
+		in2 <= x"0005";
       wait;
    end process;
 

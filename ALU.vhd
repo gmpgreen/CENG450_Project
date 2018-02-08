@@ -19,6 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use work.MUX.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -63,6 +64,8 @@ begin
 operation_results(1) <= std_logic_vector(signed(in1) + signed(in2));
 operation_results(2) <= std_logic_vector(signed(in1) - signed(in2));
 operation_results(3) <= std_logic_vector(signed(in1) * signed(in2));
+operation_results(4) <= std_logic_vector(in1 nand in2);
+shift_left : entity work.barrel_shift_left port map(in1, in2(3 downto 0), operation_results(5));
 
 -- Assignment of result
 result <= 

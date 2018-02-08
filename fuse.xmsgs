@@ -5,5 +5,11 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
+<msg type="warning" file="HDLCompiler" num="797" delta="unknown" >"C:/Users/lymacasm/RegFile_ALU/MUX.vhd" Line 80: Subprogram &lt;<arg fmt="%s" index="1">mux2</arg>&gt; does not conform with its declaration.
+</msg>
+
+<msg type="warning" file="HDLCompiler" num="797" delta="unknown" >"C:/Users/lymacasm/RegFile_ALU/MUX.vhd" Line 95: Subprogram &lt;<arg fmt="%s" index="1">barrel_shift_left</arg>&gt; does not conform with its declaration.
+</msg>
+
 </messages>
 

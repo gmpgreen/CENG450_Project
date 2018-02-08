@@ -1,6 +1,42 @@
-V3 3
-FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd 2018/02/01.12:40:01 O.87xd
-EN work/ALU 1517517606 FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd \
-      PB ieee/std_logic_1164 1325952872 PB ieee/NUMERIC_STD 1325952877
-AR work/ALU/Behavioral 1517517607 \
-      FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd EN work/ALU 1517517606
+V3 26
+FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd 2018/02/07.19:15:38 O.87xd
+EN work/ALU 1518060320 FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd \
+      PB ieee/std_logic_1164 1325952872 PB work/MUX 1518060317 PB ieee/NUMERIC_STD 1325952877
+AR work/ALU/Behavioral 1518060321 \
+      FL C:/Users/lymacasm/RegFile_ALU/ALU.vhd EN work/ALU 1518060320 \
+      CP work/barrel_shift_left
+FL C:/Users/lymacasm/RegFile_ALU/Barrel_Shift_Left.vhd 2018/02/07.19:24:31 O.87xd
+EN work/Barrel_Shift_Left 1518060318 \
+      FL C:/Users/lymacasm/RegFile_ALU/Barrel_Shift_Left.vhd \
+      PB ieee/std_logic_1164 1325952872
+AR work/Barrel_Shift_Left/Behavioral 1518060319 \
+      FL C:/Users/lymacasm/RegFile_ALU/Barrel_Shift_Left.vhd \
+      EN work/Barrel_Shift_Left 1518060318 CP work/mux2_8 CP work/mux2_4 \
+      CP work/mux2_2 CP work/mux2_1
+FL C:/Users/lymacasm/RegFile_ALU/MUX.vhd 2018/02/07.17:25:18 O.87xd
+PH work/MUX 1518060316 FL C:/Users/lymacasm/RegFile_ALU/MUX.vhd \
+      PB ieee/std_logic_1164 1325952872
+PB work/MUX 1518060317 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX.vhd PH work/MUX 1518060316
+FL C:/Users/lymacasm/RegFile_ALU/MUX16.vhd 2018/02/07.15:15:10 O.87xd
+PH work/MUX16 1518045497 FL C:/Users/lymacasm/RegFile_ALU/MUX16.vhd \
+      PB ieee/std_logic_1164 1325952872
+PB work/MUX16 1518045498 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX16.vhd PH work/MUX16 1518045497
+FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd 2018/02/07.18:02:34 O.87xd
+EN work/MUX2_8 1518060308 FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd \
+      PB ieee/std_logic_1164 1325952872
+AR work/MUX2_8/Behavioral 1518060309 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd EN work/MUX2_8 1518060308
+EN work/MUX2_4 1518060310 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd PB ieee/std_logic_1164 1325952872
+AR work/MUX2_4/Behavioral 1518060311 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd EN work/MUX2_4 1518060310
+EN work/MUX2_2 1518060312 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd PB ieee/std_logic_1164 1325952872
+AR work/MUX2_2/Behavioral 1518060313 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd EN work/MUX2_2 1518060312
+EN work/MUX2_1 1518060314 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd PB ieee/std_logic_1164 1325952872
+AR work/MUX2_1/Behavioral 1518060315 \
+      FL C:/Users/lymacasm/RegFile_ALU/MUX2.vhd EN work/MUX2_1 1518060314

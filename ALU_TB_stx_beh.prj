@@ -1,2 +1,5 @@
+vhdl isim_temp "MUX2.vhd"
+vhdl isim_temp "MUX.vhd"
+vhdl isim_temp "Barrel_Shift_Left.vhd"
 vhdl isim_temp "ALU.vhd"
 vhdl isim_temp "ALU_TB.vhd"
