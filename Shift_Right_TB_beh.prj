@@ -1,0 +1,3 @@
+vhdl work "MUX2.vhd"
+vhdl work "Barrel_Shift_Right.vhd"
+vhdl work "Shift_Right_TB.vhd"

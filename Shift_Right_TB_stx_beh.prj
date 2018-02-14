@@ -1,0 +1,3 @@
+vhdl isim_temp "MUX2.vhd"
+vhdl isim_temp "Barrel_Shift_Right.vhd"
+vhdl isim_temp "Shift_Right_TB.vhd"

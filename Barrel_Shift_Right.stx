@@ -1,0 +1,48 @@
+Release 13.4 - xst O.87xd (nt64)
+Copyright (c) 1995-2011 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to C:/Users/gmpgreen/CENG450_Project/xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.06 secs
+ 
+--> Parameter xsthdpdir set to C:/Users/gmpgreen/CENG450_Project/xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.06 secs
+ 
+--> WARNING:Xst:3164 - Option "-debug" found multiple times in the command line. Only the first occurence is considered.
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+WARNING:HDLParsers:3607 - Unit work/MUX2_8 is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_8/Behavioral is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_4 is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_4/Behavioral is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_2 is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_2/Behavioral is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_1 is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+WARNING:HDLParsers:3607 - Unit work/MUX2_1/Behavioral is now defined in a different file.  It was defined in "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd", and is now defined in "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd".
+Compiling vhdl file "C:/Users/gmpgreen/CENG450_Project/MUX2.vhd" in Library work.
+Architecture behavioral of Entity mux2_8 is up to date.
+Architecture behavioral of Entity mux2_4 is up to date.
+Architecture behavioral of Entity mux2_2 is up to date.
+Architecture behavioral of Entity mux2_1 is up to date.
+Compiling vhdl file "C:/Users/gmpgreen/CENG450_Project/Barrel_Shift_Right.vhd" in Library work.
+Entity <Barrel_Shift_Right> compiled.
+Entity <Barrel_Shift_Right> (Architecture <Behavioral>) compiled.
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.09 secs
+ 
+--> 
+
+Total memory usage is 209020 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    9 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+

@@ -1,0 +1,5 @@
+set -tmpdir "C:/Users/gmpgreen/CENG450_Project/xst/projnav.tmp"
+set -xsthdpdir "C:/Users/gmpgreen/CENG450_Project/xst"
+elaborate
+-ifn Barrel_Shift_Right.prj
+-ifmt mixed

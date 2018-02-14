@@ -1,1 +1,2 @@
-work	"ALU.vhd"
+work	"Barrel_Shift_Right.vhd"
+work	"MUX2.vhd"
