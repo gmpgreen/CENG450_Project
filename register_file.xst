@@ -1,5 +1,0 @@
-set -tmpdir "C:/Users/lymacasm/CENG450_Project/xst/projnav.tmp"
-set -xsthdpdir "C:/Users/lymacasm/CENG450_Project/xst"
-elaborate
--ifn register_file.prj
--ifmt mixed

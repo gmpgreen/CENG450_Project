@@ -1,8 +1,0 @@
-work	"ALU.vhd"
-work	"Adder_7bit.vhd"
-work	"Barrel_Shift_Left.vhd"
-work	"MUX.vhd"
-work	"MUX2.vhd"
-work	"ROM.vhd"
-work	"Register_File.vhd"
-work	"Simple_Controller.vhd"

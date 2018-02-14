@@ -1,2 +1,0 @@
-vhdl isim_temp "Register_File.vhd"
-vhdl isim_temp "Official_RegFile_TB.vhd"

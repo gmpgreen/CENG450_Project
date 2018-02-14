@@ -1,5 +1,0 @@
-vhdl work "MUX2.vhd"
-vhdl work "MUX.vhd"
-vhdl work "Barrel_Shift_Left.vhd"
-vhdl work "ALU.vhd"
-vhdl work "ALU_TB.vhd"

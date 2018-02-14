@@ -1,5 +1,0 @@
-set -tmpdir "C:/Users/lymacasm/RegFile_ALU/xst/projnav.tmp"
-set -xsthdpdir "C:/Users/lymacasm/RegFile_ALU/xst"
-elaborate
--ifn MUX2_8.prj
--ifmt mixed
