@@ -3,6 +3,7 @@
 *_isim_beh.exe
 *_isim_beh.wdb
 *.ini
+*.xmsgs
 
 
 # intermediate build files
