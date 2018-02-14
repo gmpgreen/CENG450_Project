@@ -1,0 +1,5 @@
+set -tmpdir "C:/Users/lymacasm/CENG450_Project/xst/projnav.tmp"
+set -xsthdpdir "C:/Users/lymacasm/CENG450_Project/xst"
+elaborate
+-ifn ROM.prj
+-ifmt mixed

@@ -1,4 +1,4 @@
-vhdl work "C:\Users\lymacasm\RegFile_ALU\MUX2.vhd"
-vhdl work "C:\Users\lymacasm\RegFile_ALU\MUX.vhd"
-vhdl work "C:\Users\lymacasm\RegFile_ALU\Barrel_Shift_Left.vhd"
-vhdl work "C:\Users\lymacasm\RegFile_ALU\ALU.vhd"
+vhdl work "C:\Users\lymacasm\CENG450_Project\MUX2.vhd"
+vhdl work "C:\Users\lymacasm\CENG450_Project\MUX.vhd"
+vhdl work "C:\Users\lymacasm\CENG450_Project\Barrel_Shift_Left.vhd"
+vhdl work "C:\Users\lymacasm\CENG450_Project\ALU.vhd"

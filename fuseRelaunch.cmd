@@ -1,1 +1,1 @@
--intstyle "ise" -incremental -o "C:/Users/lymacasm/RegFile_ALU/ALU_TB_isim_beh.exe" -prj "C:/Users/lymacasm/RegFile_ALU/ALU_TB_beh.prj" "work.ALU_TB" 
+-intstyle "ise" -incremental -o "C:/Users/lymacasm/CENG450_Project/Simple_Controller_TB_isim_beh.exe" -prj "C:/Users/lymacasm/CENG450_Project/Simple_Controller_TB_beh.prj" "work.Simple_Controller_TB" 

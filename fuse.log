@@ -1,30 +1,41 @@
-Running: C:\Xilinx\13.4\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -o C:/Users/lymacasm/RegFile_ALU/ALU_TB_isim_beh.exe -prj C:/Users/lymacasm/RegFile_ALU/ALU_TB_beh.prj work.ALU_TB 
+Running: C:\Xilinx\13.4\ISE_DS\ISE\bin\nt64\unwrapped\fuse.exe -intstyle ise -incremental -o C:/Users/lymacasm/CENG450_Project/Simple_Controller_TB_isim_beh.exe -prj C:/Users/lymacasm/CENG450_Project/Simple_Controller_TB_beh.prj work.Simple_Controller_TB 
 ISim O.87xd (signature 0xc3576ebc)
 Number of CPUs detected in this system: 8
 Turning on mult-threading, number of parallel sub-compilation jobs: 16 
 Determining compilation order of HDL files
-Parsing VHDL file "C:/Users/lymacasm/RegFile_ALU/MUX2.vhd" into library work
-Parsing VHDL file "C:/Users/lymacasm/RegFile_ALU/MUX.vhd" into library work
-WARNING:HDLCompiler:797 - "C:/Users/lymacasm/RegFile_ALU/MUX.vhd" Line 80: Subprogram <mux2> does not conform with its declaration.
-WARNING:HDLCompiler:797 - "C:/Users/lymacasm/RegFile_ALU/MUX.vhd" Line 95: Subprogram <barrel_shift_left> does not conform with its declaration.
-Parsing VHDL file "C:/Users/lymacasm/RegFile_ALU/Barrel_Shift_Left.vhd" into library work
-Parsing VHDL file "C:/Users/lymacasm/RegFile_ALU/ALU.vhd" into library work
-Parsing VHDL file "C:/Users/lymacasm/RegFile_ALU/ALU_TB.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/MUX2.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/MUX.vhd" into library work
+WARNING:HDLCompiler:797 - "C:/Users/lymacasm/CENG450_Project/MUX.vhd" Line 80: Subprogram <mux2> does not conform with its declaration.
+WARNING:HDLCompiler:797 - "C:/Users/lymacasm/CENG450_Project/MUX.vhd" Line 95: Subprogram <barrel_shift_left> does not conform with its declaration.
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/Barrel_Shift_Left.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/ROM.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/Register_File.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/ALU.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/Adder_7bit.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/Simple_Controller.vhd" into library work
+Parsing VHDL file "C:/Users/lymacasm/CENG450_Project/Simple_Controller_TB.vhd" into library work
 Starting static elaboration
 Completed static elaboration
 Compiling package standard
 Compiling package std_logic_1164
+Compiling package std_logic_arith
+Compiling package std_logic_unsigned
 Compiling package mux
 Compiling package numeric_std
+Compiling architecture behavioural of entity register_file [register_file_default]
 Compiling architecture behavioral of entity MUX2_8 [mux2_8_default]
 Compiling architecture behavioral of entity MUX2_4 [mux2_4_default]
 Compiling architecture behavioral of entity MUX2_2 [mux2_2_default]
 Compiling architecture behavioral of entity MUX2_1 [mux2_1_default]
 Compiling architecture behavioral of entity Barrel_Shift_Left [barrel_shift_left_default]
 Compiling architecture behavioral of entity ALU [alu_default]
-Compiling architecture behavior of entity alu_tb
+Compiling architecture behavioral of entity ROM [rom_default]
+Compiling architecture behavioral of entity Adder_7bit [adder_7bit_default]
+Compiling architecture behavioral of entity Simple_Controller [simple_controller_default]
+Compiling architecture behavior of entity simple_controller_tb
 Time Resolution for simulation is 1ps.
-Compiled 17 VHDL Units
-Built simulation executable C:/Users/lymacasm/RegFile_ALU/ALU_TB_isim_beh.exe
-Fuse Memory Usage: 36412 KB
-Fuse CPU Usage: 373 ms
+Waiting for 5 sub-compilation(s) to finish...
+Compiled 27 VHDL Units
+Built simulation executable C:/Users/lymacasm/CENG450_Project/Simple_Controller_TB_isim_beh.exe
+Fuse Memory Usage: 37776 KB
+Fuse CPU Usage: 468 ms

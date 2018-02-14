@@ -18,7 +18,10 @@ architecture behavioural of register_file is
 
 type reg_array is array (integer range 0 to 7) of std_logic_vector(15 downto 0);
 --internals signals
-signal reg_file : reg_array; begin
+signal reg_file : reg_array := 
+	(x"0000", x"0A0A", x"F0F0", x"1111", 
+	 x"FFFF", x"CCCC", x"0001", x"8000");
+begin
 --write operation 
 process(clk)
 begin
