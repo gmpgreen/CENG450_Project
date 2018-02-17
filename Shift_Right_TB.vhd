@@ -78,9 +78,21 @@ BEGIN
       wait for clk_period*10;
 
       -- insert stimulus here
-      input <= x"FF33";
+		input <= x"ABCD";
+		shift <= x"4";
+		wait for clk_period*3;
+		input <= x"0ACC";
 		shift <= x"8";
-	   
+		wait for clk_period*3;
+		input <= x"CA38";
+		shift <= x"2";
+		wait for clk_period*3;
+	   input <= x"6F0F";
+		shift <= x"1";
+		wait for clk_period*3;
+	   input <= x"A53C";
+		shift <= x"F";
+		
 		wait;
    end process;
 
