@@ -75,7 +75,8 @@ result_intermediate <=
 	operation_results(3) when (alu_mode = mul_op) else
 	operation_results(4) when (alu_mode = nand_op) else
 	operation_results(5) when (alu_mode = shl_op) else
-	operation_results(6) when (alu_mode = shr_op);
+	operation_results(6) when (alu_mode = shr_op) else
+	result_intermediate;
 	
 -- Pipeline result through
 result <= result_intermediate;

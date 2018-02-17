@@ -52,7 +52,7 @@ ARCHITECTURE behavior OF Simple_Controller_TB IS
    signal clk : std_logic := '0';
 
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
+   constant clk_period : time := 10 us;
  
 BEGIN
  

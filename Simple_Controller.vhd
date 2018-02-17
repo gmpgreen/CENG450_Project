@@ -31,7 +31,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Simple_Controller is
     Port ( rst : in  STD_LOGIC;
-           clk : in  STD_LOGIC);
+           clk : in  STD_LOGIC;
+			  alu_out : out std_logic_vector(15 downto 0);
+			  instruction_thing : out std_logic_vector(15 downto 0);
+			  z : out std_logic;
+			  n : out std_logic);
 end Simple_Controller;
 
 architecture Behavioral of Simple_Controller is
@@ -136,6 +140,11 @@ begin
 		wr_enable <=
 			'1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op,
 			'0' when others;
+			
+	alu_out <= wr_data;
+	instruction_thing <= instruction;
+	z <= z_flag;
+	n <= n_flag;
 			
 	process(clk)
 	begin

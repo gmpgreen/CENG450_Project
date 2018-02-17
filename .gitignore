@@ -4,6 +4,8 @@
 *_isim_beh.wdb
 *.ini
 *.xmsgs
+*.exe
+*.wdb
 
 
 # intermediate build files
@@ -74,3 +76,4 @@ xst/
 _ngo/
 _xmsgs/
 isim/
+netgen/
