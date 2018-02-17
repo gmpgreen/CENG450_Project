@@ -52,8 +52,8 @@ architecture Behavioral of ROM is
 	type ROM_TYPE is array (0 to 127) of std_logic_vector (15 downto 0);
 
 	constant rom_content : ROM_TYPE := (
-		nop_op & "000000000",
-		nop_op & "000000000",
+		test_op & "000000000", -- TEST r0
+		test_op & "100000000", -- TEST r4
 		nop_op & "000000000",
 		nop_op & "000000000",
 		nop_op & "000000000",
