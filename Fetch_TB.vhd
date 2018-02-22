@@ -95,7 +95,9 @@ BEGIN
 		rst <= '0';
       wait for clk_period*10;
 		branch_enable <= '1';
-		branch_address <= x"AAAA";
+		branch_address <= x"00AA";
+		wait for clk_period;
+		branch_enable <= '0';
       -- insert stimulus here 
       wait;
    end process;
