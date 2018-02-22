@@ -28,10 +28,27 @@
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
+-- Select between 2 8 bit vectors
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+entity MUX2_16 is
+	Port(
+		in1, in2 : in std_logic_vector(15 downto 0);
+		sel : in std_logic;
+		output : out std_logic_vector(15 downto 0) 
+	);
+end MUX2_16;
+
+architecture Behavioral of MUX2_16 is
+begin
+	output <= in1 when sel = '0' else in2;
+end Behavioral;
+
 -- Select between 2 8 bit vectors
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
 entity MUX2_8 is
 	Port(
 		in1, in2 : in std_logic_vector(7 downto 0);

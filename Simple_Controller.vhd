@@ -86,7 +86,7 @@ begin
 
 	reg_file : entity work.register_file port map(rst, clk, rd_index1, rd_index2, rd_data1, rd_data2, wr_index, wr_data, wr_enable);
 	alu : entity work.alu port map(alu_in1, alu_in2, alu_mode, clk, rst, alu_result, z_flag, n_flag);
-	rom : entity work.rom port map(clk, PC, rom_data);
+	rom : entity work.rom_old port map(clk, PC, rom_data);
 	pc_adder : entity work.adder_7bit port map(PC, "0000001", PC_next);
 	-- Should make an IO module to hook up input and output signals here
 	
