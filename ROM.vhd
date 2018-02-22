@@ -4,7 +4,7 @@
 -- 
 -- Create Date:    16:01:43 02/13/2018 
 -- Design Name: 
--- Module Name:    ROM - Behavioral 
+-- Module Name:    ROM_OLD - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -30,13 +30,13 @@ use IEEE.STD_LOGIC_ARITH.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity ROM is
+entity ROM_OLD is
     Port ( clk : in  STD_LOGIC;
            addr : in  STD_LOGIC_VECTOR (6 downto 0);
            data : out  STD_LOGIC_VECTOR (15 downto 0));
-end ROM;
+end ROM_OLD;
 
-architecture Behavioral of ROM is
+architecture Behavioral of ROM_OLD is
 
 	-- Op Codes
 	constant nop_op : std_logic_vector(6 downto 0)  := "0000000";
