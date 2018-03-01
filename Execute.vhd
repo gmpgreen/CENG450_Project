@@ -33,7 +33,7 @@ entity Execute is
     Port ( ALU_Mode : in  STD_LOGIC_VECTOR (2 downto 0);
            input1 : in  STD_LOGIC_VECTOR (15 downto 0);
            input2 : in  STD_LOGIC_VECTOR (15 downto 0);
-			  shift : in std_logic_vector(15 downto 0);
+			  shift : in std_logic_vector(3 downto 0);
            Z : out  STD_LOGIC;
            N : out  STD_LOGIC;
            ALU_Result : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -60,8 +60,8 @@ begin
 
 	ALU : entity work.alu port map(in1, muxed_in2, alu_mode_buf, clk, rst, ALU_Result, Z, N);
 	
-	muxed_in2 <= shift when alu_mode = "101" else
-					 shift when alu_mode = "110" else
+	muxed_in2 <= c1 when alu_mode = "101" else
+					 c1 when alu_mode = "110" else
 					 in2;
 
 	process(clk)
@@ -79,7 +79,7 @@ begin
 				alu_mode_buf <= ALU_Mode;
 				in1 <= input1;
 				in2 <= input2;
-				c1 <= shift;
+				c1 <= x"000" & shift;
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
 				Mem_Mode_Out <= Mem_Mode_In;
 				Load_Imm_Out <= Load_Imm_In;
