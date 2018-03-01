@@ -36,13 +36,19 @@ entity Execute is
 			  shift : in std_logic_vector(3 downto 0);
            Z : out  STD_LOGIC;
            N : out  STD_LOGIC;
-           ALU_Result : out  STD_LOGIC_VECTOR (15 downto 0);
+           ALU_Result : out  STD_LOGIC_VECTOR(15 downto 0);
+			  ra_idx_in : in std_logic_vector(2 downto 0);
            Mem_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
+			  Imediate_Mode_In : std_logic;
            Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
            Load_Imm_In : in  STD_LOGIC_VECTOR (7 downto 0);
+			  ra_idx_out : out std_logic_vector(2 downto 0);
            Mem_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+			  Immediate_Mode_Out : out std_logic;
            Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
            Load_Imm_Out : out  STD_LOGIC_VECTOR (7 downto 0);
+			  reg1_val : out std_logic_vector(15 downto 0);
+			  reg2_val : out std_logic_vector(15 downto 0);
            clk : in  STD_LOGIC;
            rst : in  STD_LOGIC);
 end Execute;
@@ -75,6 +81,10 @@ begin
 				Wr_Back_Mode_Out <= "00";
 				Mem_Mode_Out <= "00";
 				Load_Imm_Out <= x"00";
+				Immediate_Mode_Out <= '0';
+				reg1_val <= x"0000";
+				reg2_val <= x"0000";
+				ra_idx_out <= "000";
 			else
 				alu_mode_buf <= ALU_Mode;
 				in1 <= input1;
@@ -83,6 +93,10 @@ begin
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
 				Mem_Mode_Out <= Mem_Mode_In;
 				Load_Imm_Out <= Load_Imm_In;
+				Immediate_Mode_Out <= Imediate_Mode_In;
+				reg1_val <= input1;
+				reg2_val <= input2;
+				ra_idx_out <= ra_idx_in;
 			end if;
 		end if;
 	end process;

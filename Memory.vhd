@@ -30,45 +30,65 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Memory is
-    Port ( Write_Enable : in  STD_LOGIC;
-           Address : in  STD_LOGIC_VECTOR (15 downto 0);
-           Write_Data : in  STD_LOGIC_VECTOR (15 downto 0);
+    Port ( Mem_Mode : in  STD_LOGIC_VECTOR(1 downto 0);
+			  Destination_Reg : in std_logic_vector(15 downto 0);
+			  Source_Reg : in std_logic_vector(15 downto 0);
            Read_Data : out  STD_LOGIC_VECTOR (15 downto 0);
            Subr_Ret_In : in  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_In : in  STD_LOGIC_VECTOR (15 downto 0);
            Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
+			  Immediate_Mode_In : in std_logic;
+			  ra_idx_in : in std_logic_vector(2 downto 0);
+			  Source_Reg_Out : out std_logic_vector(15 downto 0);
            Subr_Ret_Out : out  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_Out : out  STD_LOGIC_VECTOR (15 downto 0);
            Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+			  Immediate_Mode_Out : out std_logic;
+			  ra_idx_out : out std_logic_vector(2 downto 0);
            clk : in  STD_LOGIC;
            rst : in  STD_LOGIC);
 end Memory;
 
 architecture Behavioral of Memory is
 
-signal wr_en : std_logic;
+signal read_write : std_logic;
+signal mem_en : std_logic; -- Read when 0, Write when 1
 signal addr : std_logic_vector(15 downto 0);
-signal wr_data : std_logic_vector(15 downto 0);
+signal reg_dest : std_logic_vector(15 downto 0);
+signal reg_src : std_logic_vector(15 downto 0);
+signal write_data : std_logic_vector(15 downto 0);
 
 begin
+
+	addr <= reg_dest when (read_write = '1') else reg_src;
+	write_data <= reg_src;
 
 	process(clk)
 	begin
 		if rising_edge(clk) then
 			if (rst = '1') then
-				wr_en <= '0';
+				read_write <= '0';
+				mem_en <= '0';
 				addr <= x"0000";
-				wr_data <= x"0000";
+				reg_dest <= x"0000";
+				reg_src <= x"0000";
 				Subr_Ret_Out <= x"0000";
 				ALU_Result_Out <= x"0000";
 				Wr_Back_Mode_Out <= "00";
+				Immediate_Mode_Out <= '0';
+				ra_idx_out <= "000";
+				Source_Reg_Out <= x"0000";
 			else
-				wr_en <= Write_Enable;
-				addr <= Address;
-				wr_data <= Write_Data;
+				read_write <= Mem_Mode(1);
+				mem_en <= Mem_Mode(0);
+				reg_dest <= Destination_Reg;
+				reg_src <= Source_Reg;
 				Subr_Ret_Out <= Subr_Ret_In;
 				ALU_Result_Out <= ALU_Result_In;
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
+				Immediate_Mode_Out <= Immediate_Mode_In;
+				ra_idx_out <= ra_idx_in;
+				Source_Reg_Out <= Source_Reg;
 			end if;
 		end if;
 	end process;
