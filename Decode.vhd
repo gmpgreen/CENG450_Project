@@ -76,6 +76,7 @@ constant load : std_logic_vector(6 downto 0)		:= "0010000";
 constant store : std_logic_vector(6 downto 0)	:= "0010001";
 
 begin
+
 --signal assignments
 c1 <= instruction(3 downto 0); --shift
 ra_index <= instruction(8 downto 6);
@@ -104,6 +105,10 @@ with instruction(15 downto 9) select
 with instruction(15 downto 9) select	
 	mem_mode <= "10" when load,
 	"00" when others;
+	
+--reg file
+reg_file : entity work.register_file port map(rst, clk, rd_index1, 
+rd_index2, rd_data1, rd_data2, wr_index, wr_data, wr_enable);
 	
 --latching		
 	process(clk)
