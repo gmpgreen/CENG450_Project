@@ -51,9 +51,14 @@ constant mul_op : std_logic_vector(2 downto 0) := "011";
 constant nand_op : std_logic_vector(2 downto 0) := "100";
 constant shl_op : std_logic_vector(2 downto 0) := "101";
 constant shr_op : std_logic_vector(2 downto 0) := "110";
+constant test_op : std_logic_vector(2 downto 0) := "111";
 
 -- Signals
 type result_array is array (integer range 0 to 6) of std_logic_vector(15 downto 0);
+signal z_result_cur : std_logic;
+signal n_result_cur : std_logic;
+signal z_result_old : std_logic;
+signal n_result_old : std_logic;
 signal operation_results : result_array;
 signal result_intermediate : std_logic_vector(15 downto 0); -- Added so that the result can be read for Z & N.
 
@@ -81,9 +86,17 @@ result_intermediate <=
 -- Pipeline result through
 result <= result_intermediate;
 
--- Set zero and negative flags
-z_flag <= '1' when (result_intermediate = x"0000") else '0';
-n_flag <= '1' when (result_intermediate(15) = '1') else '0';
+-- Test in1 for zero and negative
+z_result_cur <= '1' when (in1 = x"0000") else '0';
+n_result_cur <= '1' when (in1(15) = '1') else '0';
+
+-- Check whether we need to update the signals
+z_result_old <= z_result_cur when (alu_mode = test_op) else z_result_old;
+n_result_old <= n_result_cur when (alu_mode = test_op) else n_result_old;
+
+-- Wire the output to the held result
+z_flag <= z_result_old;
+n_flag <= n_result_old;
 	
 end Behavioral;
 

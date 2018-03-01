@@ -101,18 +101,17 @@ BEGIN
 
       -- insert stimulus here
 		wait for clk_period;
+		alu_mode <= "111";
+		in1 <= x"0000";
+		wait for clk_period;
 		alu_mode <= "101";
 		in1 <= x"1111";
-		in2 <= x"0001";
-		wait for clk_period*3;
-		in2 <= x"0002";
-		wait for clk_period*3;
-		in2 <= x"0004";
-		wait for clk_period*3;
-		in2 <= x"0008";
-		wait for clk_period*3;
+		wait for clk_period;
+		alu_mode <= "111";
 		in1 <= x"FFFF";
-		in2 <= x"0005";
+		wait for clk_period;
+		alu_mode <= "000";
+		in1 <= x"0000";
       wait;
    end process;
 
