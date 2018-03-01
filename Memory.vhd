@@ -30,23 +30,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Memory is
-    Port ( Mem_Mode : in  STD_LOGIC_VECTOR(1 downto 0);
+    Port ( rst : in  STD_LOGIC; 
+           clk : in  STD_LOGIC;
+			  Mem_Mode : in  STD_LOGIC_VECTOR(1 downto 0);
 			  Destination_Reg : in std_logic_vector(15 downto 0);
 			  Source_Reg : in std_logic_vector(15 downto 0);
+			  Source_Reg_Out : out std_logic_vector(15 downto 0);
            Read_Data : out  STD_LOGIC_VECTOR (15 downto 0);
            Subr_Ret_In : in  STD_LOGIC_VECTOR (15 downto 0);
-           ALU_Result_In : in  STD_LOGIC_VECTOR (15 downto 0);
-           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
-			  Immediate_Mode_In : in std_logic;
-			  ra_idx_in : in std_logic_vector(2 downto 0);
-			  Source_Reg_Out : out std_logic_vector(15 downto 0);
            Subr_Ret_Out : out  STD_LOGIC_VECTOR (15 downto 0);
+           ALU_Result_In : in  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_Out : out  STD_LOGIC_VECTOR (15 downto 0);
+           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
            Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+			  Immediate_Mode_In : in std_logic;
 			  Immediate_Mode_Out : out std_logic;
-			  ra_idx_out : out std_logic_vector(2 downto 0);
-           clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC);
+			  ra_idx_in : in std_logic_vector(2 downto 0);
+			  ra_idx_out : out std_logic_vector(2 downto 0));
 end Memory;
 
 architecture Behavioral of Memory is

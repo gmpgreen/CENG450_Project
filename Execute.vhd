@@ -30,7 +30,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Execute is
-    Port ( ALU_Mode : in  STD_LOGIC_VECTOR (2 downto 0);
+    Port ( rst : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+			  ALU_Mode : in  STD_LOGIC_VECTOR (2 downto 0);
            input1 : in  STD_LOGIC_VECTOR (15 downto 0);
            input2 : in  STD_LOGIC_VECTOR (15 downto 0);
 			  shift : in std_logic_vector(3 downto 0);
@@ -38,19 +40,17 @@ entity Execute is
            N : out  STD_LOGIC;
            ALU_Result : out  STD_LOGIC_VECTOR(15 downto 0);
 			  ra_idx_in : in std_logic_vector(2 downto 0);
-           Mem_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
-			  Imediate_Mode_In : std_logic;
-           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
-           Load_Imm_In : in  STD_LOGIC_VECTOR (7 downto 0);
 			  ra_idx_out : out std_logic_vector(2 downto 0);
+           Mem_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
            Mem_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+			  Imediate_Mode_In : std_logic;
 			  Immediate_Mode_Out : out std_logic;
+           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
            Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+           Load_Imm_In : in  STD_LOGIC_VECTOR (7 downto 0);
            Load_Imm_Out : out  STD_LOGIC_VECTOR (7 downto 0);
 			  reg1_val : out std_logic_vector(15 downto 0);
-			  reg2_val : out std_logic_vector(15 downto 0);
-           clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC);
+			  reg2_val : out std_logic_vector(15 downto 0));
 end Execute;
 
 architecture Behavioral of Execute is

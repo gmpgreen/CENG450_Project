@@ -30,8 +30,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Fetch is
-    Port ( clk : in STD_LOGIC;
-			  rst : in STD_LOGIC;
+    Port ( rst : in STD_LOGIC;
+			  clk : in STD_LOGIC;
 			  branch_enable : in  STD_LOGIC;
            branch_address : in  STD_LOGIC_VECTOR (15 downto 0);
            instruction : out  STD_LOGIC_VECTOR (15 downto 0);

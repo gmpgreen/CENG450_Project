@@ -30,7 +30,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Writeback is
-    Port ( Write_Mode : in  STD_LOGIC_VECTOR (1 downto 0);
+    Port ( rst : in  STD_LOGIC;
+           clk : in  STD_LOGIC;
+			  Write_Mode : in  STD_LOGIC_VECTOR (1 downto 0);
            Write_Index_In : in  STD_LOGIC_VECTOR (2 downto 0);
            ALU_Result : in  STD_LOGIC_VECTOR (15 downto 0);
 			  Memory_Read : in std_logic_vector(15 downto 0);
@@ -38,9 +40,7 @@ entity Writeback is
 			  Source_Reg : in std_logic_vector(15 downto 0);
            Write_Enable : out  STD_LOGIC;
            Write_Index_Out : out  STD_LOGIC_VECTOR (2 downto 0);
-           Write_Data_Out : out  STD_LOGIC_VECTOR (15 downto 0);
-           clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC);
+           Write_Data_Out : out  STD_LOGIC_VECTOR (15 downto 0));
 end Writeback;
 
 architecture Behavioral of Writeback is
