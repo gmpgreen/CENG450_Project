@@ -60,11 +60,14 @@ signal in1 : std_logic_vector(15 downto 0);
 signal in2 : std_logic_vector(15 downto 0);
 signal c1 : std_logic_vector(15 downto 0);
 signal muxed_in2 : std_logic_vector(15 downto 0);
+signal alu_result_buf : std_logic_vector(15 downto 0);
 
 
 begin
 
-	ALU : entity work.alu port map(in1, muxed_in2, alu_mode_buf, clk, rst, ALU_Result, Z, N);
+	ALU : entity work.alu port map(in1, muxed_in2, alu_mode_buf, clk, rst, alu_result_buf, Z, N);
+	
+	ALU_Result <= alu_result_buf;
 	
 	muxed_in2 <= c1 when alu_mode = "101" else
 					 c1 when alu_mode = "110" else

@@ -2,15 +2,15 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   18:37:22 01/31/2018
+-- Create Date:   18:20:04 02/28/2018
 -- Design Name:   
--- Module Name:   C:/Users/lymacasm/RegFile_ALU/ALU_TB.vhd
+-- Module Name:   C:/Users/gmpgreen/CENG450_Project/Pipeline_TB.vhd
 -- Project Name:  RegFile_ALU
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: ALU
+-- VHDL Test Bench Created by ISE for module: Pipeline
 -- 
 -- Dependencies:
 -- 
@@ -32,38 +32,24 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY ALU_TB IS
-END ALU_TB;
+ENTITY Pipeline_TB IS
+END Pipeline_TB;
  
-ARCHITECTURE behavior OF ALU_TB IS 
+ARCHITECTURE behavior OF Pipeline_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT ALU
+    COMPONENT Pipeline
     PORT(
-         in1 : IN  std_logic_vector(15 downto 0);
-         in2 : IN  std_logic_vector(15 downto 0);
-         alu_mode : IN  std_logic_vector(2 downto 0);
          clk : IN  std_logic;
-         rst : IN  std_logic;
-         result : OUT  std_logic_vector(15 downto 0);
-         z_flag : OUT  std_logic;
-         n_flag : OUT  std_logic
+         rst : IN  std_logic
         );
     END COMPONENT;
     
 
    --Inputs
-   signal in1 : std_logic_vector(15 downto 0) := (others => '0');
-   signal in2 : std_logic_vector(15 downto 0) := (others => '0');
-   signal alu_mode : std_logic_vector(2 downto 0) := (others => '0');
    signal clk : std_logic := '0';
    signal rst : std_logic := '0';
-
- 	--Outputs
-   signal result : std_logic_vector(15 downto 0);
-   signal z_flag : std_logic;
-   signal n_flag : std_logic;
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -71,15 +57,9 @@ ARCHITECTURE behavior OF ALU_TB IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: ALU PORT MAP (
-          in1 => in1,
-          in2 => in2,
-          alu_mode => alu_mode,
+   uut: Pipeline PORT MAP (
           clk => clk,
-          rst => rst,
-          result => result,
-          z_flag => z_flag,
-          n_flag => n_flag
+          rst => rst
         );
 
    -- Clock process definitions
@@ -95,24 +75,14 @@ BEGIN
    -- Stimulus process
    stim_proc: process
    begin		
-      -- hold reset state for 100 ns.
+      -- hold reset state for 100 ns.	
 		rst <= '1';
-      wait for clk_period*10;
+      wait for 100 ns;
 		rst <= '0';
-      -- insert stimulus here
-		wait for clk_period;
-		alu_mode <= "111";
-		in1 <= x"F555";
-		in2 <= x"9999";
-		wait for clk_period;
-		in1 <= x"0000";
-		wait for clk_period;
-		alu_mode <= "010";
-		in1 <= x"FFFF";
-		in2 <= x"FFFF";
-		wait for clk_period;
-		alu_mode <= "000";
-		in1 <= x"0000";
+      wait for clk_period*10;
+		
+      -- insert stimulus here 
+
       wait;
    end process;
 

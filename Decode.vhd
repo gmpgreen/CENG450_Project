@@ -106,8 +106,8 @@ with instruction(15 downto 9) select
 	mem_mode <= "10" when load,
 	"00" when others;
 	
---reg file
-reg_file : entity work.register_file port map(rst, clk, rd_index1, 
+--reg file (Inserted 0 for reset for testing)
+reg_file : entity work.register_file port map('0', clk, rd_index1, 
 rd_index2, rd_data1, rd_data2, wr_index, wr_data, wr_enable);
 	
 --latching		

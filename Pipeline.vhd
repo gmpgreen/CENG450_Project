@@ -37,9 +37,9 @@ end Pipeline;
 architecture Behavioral of Pipeline is
 
 -- Branch output signals
-signal branch_enable : std_logic;
-signal branch_addr : std_logic_vector(15 downto 0);
-signal subroutine_ret_b : std_logic_vector(15 downto 0);
+signal branch_enable : std_logic := '0';
+signal branch_addr : std_logic_vector(15 downto 0) := x"0000";
+signal subroutine_ret_b : std_logic_vector(15 downto 0) := x"0000";
 
 -- Fetch output signals
 signal instruction : std_logic_vector(15 downto 0);
