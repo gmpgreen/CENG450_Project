@@ -37,6 +37,7 @@ entity Decode is
 			  ra_index : out std_logic_vector(2 downto 0);
            pc_in : in  STD_LOGIC_VECTOR (15 downto 0);
 			  pc_out : out STD_LOGIC_VECTOR (15 downto 0);
+			  branch_en : out std_logic;
            branch_mode : out  STD_LOGIC_VECTOR (2 downto 0);
            branch_offset : out  STD_LOGIC_VECTOR (8 downto 0);
            ALU_Mode : out  STD_LOGIC_VECTOR (2 downto 0);
@@ -74,12 +75,20 @@ constant in_op : std_logic_vector(6 downto 0)   := "0100001";
 constant load_imm : std_logic_vector(6 downto 0):= "0010010";
 constant load : std_logic_vector(6 downto 0)		:= "0010000";
 constant store : std_logic_vector(6 downto 0)	:= "0010001";
+constant br : std_logic_vector(2 downto 0) 			:= "011";
+constant br_neg : std_logic_vector(2 downto 0) 		:= "100";
+constant br_zero : std_logic_vector(2 downto 0) 	:= "101";
+constant br_sub : std_logic_vector(2 downto 0) 		:= "110";
+constant rtn	: std_logic_vector(2 downto 0)		:= "111";
 
 begin
 
 --signal assignments
 c1 <= instruction_intrn(3 downto 0); --shift
 ra_index <= instruction_intrn(8 downto 6);
+
+branch_mode <= instruction_intrn(11 downto 9);
+branch_en <= '1' when instruction_intrn(15 downto 13) = "100";
 
 ALU_Mode <=
 	instruction_intrn(11 downto 9) when instruction_intrn(15 downto 12) = "0000" else
@@ -92,7 +101,9 @@ with instruction_intrn(15 downto 9) select
 	"00000000" when others;
 with instruction_intrn(15 downto 9) select
 	rd_index1 <= 	instruction_intrn(5 downto 3) when add_op | sub_op | mul_op | nand_op,
-						instruction_intrn(8 downto 6) when shl_op | shr_op | test_op,
+						instruction_intrn(8 downto 6) when shl_op | shr_op | test_op | 
+						br | br_neg | br_zero | br_sub,
+						"111" when rtn,
 						"000" when others;	
 rd_index2 <= instruction_intrn(2 downto 0);
 with instruction_intrn (15 downto 9) select
