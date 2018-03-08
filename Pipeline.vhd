@@ -107,7 +107,6 @@ begin
 	-- Setup the writeback stage
 	Writeback : entity work.writeback port map(rst, clk, wrback_mode_m, ra_idx_m, alu_result_m, 
 		mem_read_data, subroutine_ret_m, src_reg, wr_en, wr_idx, wr_data); 
-		
 
 end Behavioral;
 

@@ -78,28 +78,27 @@ constant store : std_logic_vector(6 downto 0)	:= "0010001";
 begin
 
 --signal assignments
-c1 <= instruction(3 downto 0); --shift
-ra_index <= instruction(8 downto 6);
+c1 <= instruction_intrn(3 downto 0); --shift
+ra_index <= instruction_intrn(8 downto 6);
 
 ALU_Mode <=
-	instruction(11 downto 9) when instruction(15 downto 12) = "0000" else
+	instruction_intrn(11 downto 9) when instruction_intrn(15 downto 12) = "0000" else
 	"000";
-with instruction(15 downto 9) select
+with instruction_intrn(15 downto 9) select
 	Writeback_Mode <= "00" when test_op | out_op,
 	"01" when others;
-with instruction(15 downto 9) select
+with instruction_intrn(15 downto 9) select
 	Immediate <= "00000001" when shl_op | shr_op,
 	"00000000" when others;
-with instruction(15 downto 9) select
-	rd_index1 <= instruction(5 downto 3) when add_op | sub_op | mul_op | nand_op,
-	"000" when others;
-with instruction(15 downto 9) select
-	rd_index2 <= instruction(2 downto 0) when add_op | sub_op | mul_op | nand_op,
-	"000" when others;
-with instruction (15 downto 9) select
-	immediate_mode <= instruction(8) when load_imm,
+with instruction_intrn(15 downto 9) select
+	rd_index1 <= 	instruction_intrn(5 downto 3) when add_op | sub_op | mul_op | nand_op,
+						instruction_intrn(8 downto 6) when shl_op | shr_op | test_op,
+						"000" when others;	
+rd_index2 <= instruction_intrn(2 downto 0);
+with instruction_intrn (15 downto 9) select
+	immediate_mode <= instruction_intrn(8) when load_imm,
 	'0' when others;
-with instruction(15 downto 9) select	
+with instruction_intrn(15 downto 9) select	
 	mem_mode <= "11" when store,
 	"00" when others;
 with instruction(15 downto 9) select	

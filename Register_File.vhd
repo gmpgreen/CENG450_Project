@@ -25,22 +25,23 @@ begin
 --write operation 
 process(clk)
 begin
-   if(clk='0' and clk'event) then if(rst='1') then
-      for i in 0 to 7 loop
-         reg_file(i)<= (others => '0'); 
-      end loop;
-   elsif(wr_enable='1') then
-      case wr_index(2 downto 0) is
-      when "000" => reg_file(0) <= wr_data;
-		when "001" => reg_file(1) <= wr_data;
-		when "010" => reg_file(2) <= wr_data;
-		when "011" => reg_file(3) <= wr_data;
-		when "100" => reg_file(4) <= wr_data;
-		when "101" => reg_file(5) <= wr_data;
-		when "110" => reg_file(6) <= wr_data;
-		when "111" => reg_file(7) <= wr_data;
-      when others => NULL; end case;
-    end if; 
+   if(clk='0' and clk'event) then 
+		if(rst='1') then
+			for i in 0 to 7 loop
+				reg_file(i)<= (others => '0'); 
+			end loop;
+		elsif(wr_enable='1') then
+			case wr_index(2 downto 0) is
+			when "000" => reg_file(0) <= wr_data;
+			when "001" => reg_file(1) <= wr_data;
+			when "010" => reg_file(2) <= wr_data;
+			when "011" => reg_file(3) <= wr_data;
+			when "100" => reg_file(4) <= wr_data;
+			when "101" => reg_file(5) <= wr_data;
+			when "110" => reg_file(6) <= wr_data;
+			when "111" => reg_file(7) <= wr_data;
+			when others => NULL; end case;
+		 end if; 
     end if;
 end process;
 

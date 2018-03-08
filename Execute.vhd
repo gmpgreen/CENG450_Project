@@ -69,8 +69,8 @@ begin
 	
 	ALU_Result <= alu_result_buf;
 	
-	muxed_in2 <= c1 when alu_mode = "101" else
-					 c1 when alu_mode = "110" else
+	muxed_in2 <= c1 when alu_mode_buf = "101" else
+					 c1 when alu_mode_buf = "110" else
 					 in2;
 
 	process(clk)
