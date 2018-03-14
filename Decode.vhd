@@ -39,7 +39,7 @@ entity Decode is
 			  pc_out : out STD_LOGIC_VECTOR (15 downto 0);
 			  branch_en : out std_logic;
            branch_mode : out  STD_LOGIC_VECTOR (2 downto 0);
-           branch_offset : out  STD_LOGIC_VECTOR (8 downto 0);
+           branch_offset : out  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Mode : out  STD_LOGIC_VECTOR (2 downto 0);
            Writeback_Mode : out  STD_LOGIC_VECTOR (1 downto 0);
            Immediate : out  STD_LOGIC_VECTOR (7 downto 0);
