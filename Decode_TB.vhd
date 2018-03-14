@@ -93,6 +93,15 @@ BEGIN
           rd_index1 => rd_index1,
           rd_index2 => rd_index2
         );
+-- Constants
+constant brr : std_logic_vector(6 downto 0) 			:= "1000000";
+constant brr_neg : std_logic_vector(6 downto 0) 	:= "1000001";
+constant brr_zero : std_logic_vector(6 downto 0) 	:= "1000010";
+constant br : std_logic_vector(6 downto 0) 			:= "1000011";
+constant br_neg : std_logic_vector(6 downto 0) 		:= "1000100";
+constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101";
+constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110";
+constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
 
    -- Clock process definitions
    clk_process :process
@@ -112,8 +121,8 @@ BEGIN
 
       wait for clk_period*10;
 
-      -- insert stimulus here 
-		instruction <= "0000001111000101";
+      -- insert stimulus here
+		instruction <= br_zero & "111" &;
 		wait for clk_period*3;
 		
       wait;

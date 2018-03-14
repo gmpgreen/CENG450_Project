@@ -75,11 +75,14 @@ constant in_op : std_logic_vector(6 downto 0)   := "0100001";
 constant load_imm : std_logic_vector(6 downto 0):= "0010010";
 constant load : std_logic_vector(6 downto 0)		:= "0010000";
 constant store : std_logic_vector(6 downto 0)	:= "0010001";
-constant br : std_logic_vector(2 downto 0) 			:= "011";
-constant br_neg : std_logic_vector(2 downto 0) 		:= "100";
-constant br_zero : std_logic_vector(2 downto 0) 	:= "101";
-constant br_sub : std_logic_vector(2 downto 0) 		:= "110";
-constant rtn	: std_logic_vector(2 downto 0)		:= "111";
+constant brr : std_logic_vector(6 downto 0) 			:= "1000000";
+constant brr_neg : std_logic_vector(6 downto 0) 	:= "1000001";
+constant brr_zero : std_logic_vector(6 downto 0) 	:= "1000010";
+constant br : std_logic_vector(6 downto 0) 			:= "1000011"; --uses ra
+constant br_neg : std_logic_vector(6 downto 0) 		:= "1000100"; --uses ra
+constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101"; --uses ra
+constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110"; --uses ra
+constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
 
 begin
 
