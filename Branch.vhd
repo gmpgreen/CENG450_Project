@@ -38,8 +38,8 @@ entity Branch is
 			  branch_mode_en : in std_logic;
            branch_mode : in  STD_LOGIC_VECTOR (2 downto 0);
            branch_offset : in  STD_LOGIC_VECTOR (15 downto 0);
-           N : in  STD_LOGIC;
            Z : in  STD_LOGIC;
+           N : in  STD_LOGIC;
            branch_enable : out  STD_LOGIC;
            branch_address : out  STD_LOGIC_VECTOR (15 downto 0);
            writeback_enable : out  STD_LOGIC;

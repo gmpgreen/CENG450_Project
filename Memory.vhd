@@ -37,6 +37,8 @@ entity Memory is
 			  Source_Reg : in std_logic_vector(15 downto 0);
 			  Source_Reg_Out : out std_logic_vector(15 downto 0);
            Read_Data : out  STD_LOGIC_VECTOR (15 downto 0);
+			  Wr_Back_Branch_In : in STD_LOGIC;
+			  Wr_Back_Branch_Out : out STD_LOGIC;
            Subr_Ret_In : in  STD_LOGIC_VECTOR (15 downto 0);
            Subr_Ret_Out : out  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_In : in  STD_LOGIC_VECTOR (15 downto 0);
@@ -72,6 +74,7 @@ begin
 				addr <= x"0000";
 				reg_dest <= x"0000";
 				reg_src <= x"0000";
+				Wr_Back_Branch_Out <= '0';
 				Subr_Ret_Out <= x"0000";
 				ALU_Result_Out <= x"0000";
 				Wr_Back_Mode_Out <= "00";
@@ -83,6 +86,7 @@ begin
 				mem_en <= Mem_Mode(0);
 				reg_dest <= Destination_Reg;
 				reg_src <= Source_Reg;
+				Wr_Back_Branch_Out <= Wr_Back_Branch_In;
 				Subr_Ret_Out <= Subr_Ret_In;
 				ALU_Result_Out <= ALU_Result_In;
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
