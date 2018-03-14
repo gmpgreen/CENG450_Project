@@ -31,7 +31,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity Pipeline is
     Port ( clk : in  STD_LOGIC;
-           rst : in  STD_LOGIC);
+           rst : in  STD_LOGIC;
+			  input : in std_logic_vector(15 downto 0);
+			  output : out std_logic_vector(15 downto 0));
 end Pipeline;
 
 architecture Behavioral of Pipeline is
@@ -51,7 +53,7 @@ signal ra_idx_d : std_logic_vector(2 downto 0);
 signal PC_d : std_logic_vector(15 downto 0);
 signal branch_enable_d : std_logic;
 signal branch_mode_d : std_logic_vector(2 downto 0);
-signal branch_offset_d : std_logic_vector(8 downto 0);
+signal branch_offset_d : std_logic_vector(15 downto 0);
 signal alu_mode : std_logic_vector(2 downto 0);
 signal wrback_mode_d : std_logic_vector(1 downto 0);
 signal ld_imm_d : std_logic_vector(7 downto 0);
@@ -60,6 +62,8 @@ signal rd_data2 : std_logic_vector(15 downto 0);
 signal shift : std_logic_vector(3 downto 0);
 signal imm_mode_d : std_logic;
 signal mem_mode_d : std_logic_vector(1 downto 0);
+signal output_en_d : std_logic;
+signal input_en_d : std_logic;
 
 -- Execute output signals
 signal z : std_logic;
@@ -72,6 +76,8 @@ signal wrback_mode_e : std_logic_vector(1 downto 0);
 signal ld_imm_e : std_logic_vector(7 downto 0);
 signal reg1_val : std_logic_vector(15 downto 0);
 signal reg2_val : std_logic_vector(15 downto 0);
+signal output_en_e : std_logic;
+signal input_en_e : std_logic;
 
 -- Memory output signals
 signal mem_read_data : std_logic_vector(15 downto 0);
@@ -82,6 +88,8 @@ signal alu_result_m : std_logic_vector(15 downto 0);
 signal wrback_mode_m : std_logic_vector(1 downto 0);
 signal imm_mode_m : std_logic;
 signal ra_idx_m : std_logic_vector(2 downto 0);
+signal output_en_m : std_logic;
+signal input_en_m : std_logic;
 
 -- Writeback output signals
 signal wr_idx : std_logic_vector(2 downto 0);
@@ -95,7 +103,7 @@ begin
 	-- Setup the decode stage
 	Decode : entity work.decode port map(rst, clk, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
 		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
-		wr_data, wr_en, shift, imm_mode_d, mem_mode_d);
+		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d);
 		
 	Branch : entity work.branch port map(rst, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
 		branch_offset_d, z, n, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);  
@@ -103,16 +111,18 @@ begin
 	-- Setup the execute stage
 	Execute : entity work.execute port map(rst, clk, alu_mode, rd_data1, rd_data2, shift, z, n, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
-		ld_imm_d, ld_imm_e, reg1_val, reg2_val);
+		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e);
 		
 	-- Setup the memory stage
 	Memory : entity work.memory port map(rst, clk, mem_mode_e, reg1_val, reg2_val, src_reg, mem_read_data, 
 		wrback_en_b, wrback_en_m, subroutine_ret_b, subroutine_ret_m, alu_result_e, alu_result_m, wrback_mode_e, 
-		wrback_mode_m, imm_mode_e, imm_mode_m, ra_idx_e, ra_idx_m);
+		wrback_mode_m, imm_mode_e, imm_mode_m, ra_idx_e, ra_idx_m, output_en_e, output_en_m, 
+		input_en_d, input_en_m);
 		
 	-- Setup the writeback stage
 	Writeback : entity work.writeback port map(rst, clk, wrback_mode_m, ra_idx_m, alu_result_m, 
-		mem_read_data, wrback_en_m, subroutine_ret_m, src_reg, wr_en, wr_idx, wr_data); 
+		mem_read_data, wrback_en_m, subroutine_ret_m, src_reg, wr_en, wr_idx, wr_data, output_en_m, 
+		output, input_en_m, input); 
 
 end Behavioral;
 

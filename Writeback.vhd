@@ -41,7 +41,11 @@ entity Writeback is
 			  Source_Reg : in std_logic_vector(15 downto 0);
            Write_Enable : out  STD_LOGIC;
            Write_Index_Out : out  STD_LOGIC_VECTOR (2 downto 0);
-           Write_Data_Out : out  STD_LOGIC_VECTOR (15 downto 0));
+           Write_Data_Out : out  STD_LOGIC_VECTOR (15 downto 0);
+			  output_en : in std_logic;
+			  output : out std_logic_vector(15 downto 0);
+			  input_en : in std_logic;
+			  input : in std_logic_vector(15 downto 0));
 end Writeback;
 
 architecture Behavioral of Writeback is
@@ -53,21 +57,30 @@ signal alu_data : std_logic_vector(15 downto 0);
 signal sub_ret : std_logic_vector(15 downto 0);
 signal reg_src : std_logic_vector(15 downto 0);
 signal mem_read : std_logic_vector(15 downto 0);
+signal output_inner : std_logic_vector(15 downto 0);
+signal input_inner : std_logic_vector(15 downto 0);
 
 begin
 
 	Write_Enable <=
 		'1' when wr_branch = '1' else
+		'1' when input_en = '1' else
 		'0' when wr_mode = "00" else 
 		'1';
 	Write_Index_Out <= 
 		"111" when wr_branch = '1' else
 		wr_index when wr_mode /= "00" else
+		wr_index when input_en = '1' else
 		"000";
 	Write_Data_Out <=
 		sub_ret when wr_branch = '1' else
+		input_inner when input_en = '1' else
 		alu_data when wr_mode /= "00" else
 		x"0000";
+		
+	-- Configure the output
+	output_inner <= alu_data when output_en = '1' else output_inner;
+	output <= output_inner;
 
 	process(clk)
 	begin
@@ -80,6 +93,7 @@ begin
 				sub_ret <= x"0000";
 				mem_read <= x"0000";
 				reg_src <= x"0000";
+				input_inner <= x"0000";
 			else
 				wr_mode <= Write_Mode;
 				wr_branch <= Wr_Back_Branch_En;
@@ -88,6 +102,7 @@ begin
 				sub_ret <= Subroutine_Ret_Addr;
 				mem_read <= Memory_Read;
 				reg_src <= Source_Reg;
+				input_inner <= input;
 			end if;
 		end if;
 	end process;

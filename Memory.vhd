@@ -48,7 +48,11 @@ entity Memory is
 			  Immediate_Mode_In : in std_logic;
 			  Immediate_Mode_Out : out std_logic;
 			  ra_idx_in : in std_logic_vector(2 downto 0);
-			  ra_idx_out : out std_logic_vector(2 downto 0));
+			  ra_idx_out : out std_logic_vector(2 downto 0);
+			  output_en_in : in std_logic;
+			  output_en_out : out std_logic;
+			  input_en_in : in std_logic;
+			  input_en_out : out std_logic);
 end Memory;
 
 architecture Behavioral of Memory is
@@ -81,6 +85,8 @@ begin
 				Immediate_Mode_Out <= '0';
 				ra_idx_out <= "000";
 				Source_Reg_Out <= x"0000";
+				output_en_out <= '0';
+				input_en_out <= '0';
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
@@ -93,6 +99,8 @@ begin
 				Immediate_Mode_Out <= Immediate_Mode_In;
 				ra_idx_out <= ra_idx_in;
 				Source_Reg_Out <= Source_Reg;
+				output_en_out <= output_en_in;
+				input_en_out <= input_en_in;
 			end if;
 		end if;
 	end process;

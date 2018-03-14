@@ -50,7 +50,11 @@ entity Execute is
            Load_Imm_In : in  STD_LOGIC_VECTOR (7 downto 0);
            Load_Imm_Out : out  STD_LOGIC_VECTOR (7 downto 0);
 			  reg1_val : out std_logic_vector(15 downto 0);
-			  reg2_val : out std_logic_vector(15 downto 0));
+			  reg2_val : out std_logic_vector(15 downto 0);
+			  output_en_in : in std_logic;
+			  output_en_out : out std_logic;
+			  input_en_in : in std_logic;
+			  input_en_out : out std_logic);
 end Execute;
 
 architecture Behavioral of Execute is
@@ -61,17 +65,21 @@ signal in2 : std_logic_vector(15 downto 0);
 signal c1 : std_logic_vector(15 downto 0);
 signal muxed_in2 : std_logic_vector(15 downto 0);
 signal alu_result_buf : std_logic_vector(15 downto 0);
+signal output_en : std_logic;
 
 
 begin
 
 	ALU : entity work.alu port map(in1, muxed_in2, alu_mode_buf, clk, rst, alu_result_buf, Z, N);
 	
-	ALU_Result <= alu_result_buf;
+	-- Used for both result and output
+	ALU_Result <= alu_result_buf when output_en = '0' else in1;
 	
 	muxed_in2 <= c1 when alu_mode_buf = "101" else
 					 c1 when alu_mode_buf = "110" else
 					 in2;
+					 
+	output_en_out <= output_en;
 
 	process(clk)
 	begin
@@ -88,6 +96,8 @@ begin
 				reg1_val <= x"0000";
 				reg2_val <= x"0000";
 				ra_idx_out <= "000";
+				output_en <= '0';
+				input_en_out <= '0';
 			else
 				alu_mode_buf <= ALU_Mode;
 				in1 <= input1;
@@ -100,6 +110,8 @@ begin
 				reg1_val <= input1;
 				reg2_val <= input2;
 				ra_idx_out <= ra_idx_in;
+				output_en <= output_en_in;
+				input_en_out <= input_en_in;
 			end if;
 		end if;
 	end process;
