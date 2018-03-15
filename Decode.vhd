@@ -22,7 +22,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
@@ -60,6 +60,10 @@ architecture Behavioral of Decode is
 signal rd_index1 : STD_LOGIC_VECTOR(2 downto 0);
 signal rd_index2 : STD_LOGIC_VECTOR(2 downto 0);
 signal instruction_intrn : STD_LOGIC_VECTOR (15 downto 0);
+signal relative_disp : STD_LOGIC_VECTOR (6 downto 0);
+signal absolute_disp : STD_LOGIC_VECTOR (6 downto 0);
+signal typ1_extn : STD_LOGIC_VECTOR (15 downto 0);
+signal typ2_extn : STD_LOGIC_VECTOR (15 downto 0);
 
 -- Op Codes
 constant nop_op : std_logic_vector(6 downto 0)  := "0000000";
@@ -108,7 +112,18 @@ with instruction_intrn(15 downto 9) select
 						br | br_neg | br_zero | br_sub,
 						"111" when rtn,
 						"000" when others;	
-rd_index2 <= instruction_intrn(2 downto 0);
+	rd_index2 <= instruction_intrn(2 downto 0);
+		
+typ1_extn <= "1111111" & instruction(8 downto 0) when instruction(8) = '1' else
+				 "0000000" & instruction(8 downto 0);
+
+typ2_extn <= "111111111" & instruction(5 downto 0) when instruction (5) = '1' else
+				 "000000000" & instruction(5 downto 0);
+					  
+with instruction_intrn(15 downto 9) select
+	branch_offset(15 downto 0) <= typ1_extn when brr | brr_neg | brr_zero,
+										   typ2_extn when others;
+
 with instruction_intrn (15 downto 9) select
 	immediate_mode <= instruction_intrn(8) when load_imm,
 	'0' when others;
