@@ -94,7 +94,8 @@ constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
 
 begin
 
---signal assignments
+--signal assignments--
+
 c1 <= instruction_intrn(3 downto 0); --shift
 ra_index <= instruction_intrn(8 downto 6);
 
@@ -104,12 +105,14 @@ branch_en <= '1' when instruction_intrn(15 downto 13) = "100" else '0';
 ALU_Mode <=
 	instruction_intrn(11 downto 9) when instruction_intrn(15 downto 12) = "0000" else
 	"000";
+--select shift operation
 with instruction_intrn(15 downto 9) select
 	Writeback_Mode <= "00" when test_op | out_op,
 	"01" when others;
 with instruction_intrn(15 downto 9) select
 	Immediate <= "00000001" when shl_op | shr_op,
 	"00000000" when others;
+--select read index 1 for regfile	
 with instruction_intrn(15 downto 9) select
 	rd_index1 <= 	instruction_intrn(5 downto 3) when add_op | sub_op | mul_op | nand_op,
 						instruction_intrn(8 downto 6) when shl_op | shr_op | test_op | 
@@ -117,7 +120,7 @@ with instruction_intrn(15 downto 9) select
 						"111" when rtn,
 						"000" when others;	
 	rd_index2 <= instruction_intrn(2 downto 0);
-		
+--branch offset selection		
 typ1_extn <= "1111111" & instruction(8 downto 0) when instruction(8) = '1' else
 				 "0000000" & instruction(8 downto 0);
 
@@ -127,7 +130,7 @@ typ2_extn <= "1111111111" & instruction(5 downto 0) when instruction (5) = '1' e
 with instruction_intrn(15 downto 9) select
 	branch_offset(15 downto 0) <= typ1_extn when brr | brr_neg | brr_zero,
 										   typ2_extn when others;
-
+--load/store instruction selection
 with instruction_intrn (15 downto 9) select
 	immediate_mode <= instruction_intrn(8) when load_imm,
 	'0' when others;
