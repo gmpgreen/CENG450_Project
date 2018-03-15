@@ -185,6 +185,7 @@ architecture Behavioral of ROM is
 begin
 
 	odd_byte_adder : entity work.adder_16bit port map(addr, x"0001", odd_byte);
+	--odd_byte <= addr(15 downto 1) & '1';
 	data <= rom_content(conv_integer(unsigned(addr))) & rom_content(conv_integer(unsigned(odd_byte)));
 	 
 end Behavioral;

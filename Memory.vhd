@@ -37,6 +37,8 @@ entity Memory is
 			  Source_Reg : in std_logic_vector(15 downto 0);
 			  Source_Reg_Out : out std_logic_vector(15 downto 0);
            Read_Data : out  STD_LOGIC_VECTOR (15 downto 0);
+			  Wr_Back_Branch_In : in STD_LOGIC;
+			  Wr_Back_Branch_Out : out STD_LOGIC;
            Subr_Ret_In : in  STD_LOGIC_VECTOR (15 downto 0);
            Subr_Ret_Out : out  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_In : in  STD_LOGIC_VECTOR (15 downto 0);
@@ -46,7 +48,11 @@ entity Memory is
 			  Immediate_Mode_In : in std_logic;
 			  Immediate_Mode_Out : out std_logic;
 			  ra_idx_in : in std_logic_vector(2 downto 0);
-			  ra_idx_out : out std_logic_vector(2 downto 0));
+			  ra_idx_out : out std_logic_vector(2 downto 0);
+			  output_en_in : in std_logic;
+			  output_en_out : out std_logic;
+			  input_en_in : in std_logic;
+			  input_en_out : out std_logic);
 end Memory;
 
 architecture Behavioral of Memory is
@@ -72,23 +78,29 @@ begin
 				addr <= x"0000";
 				reg_dest <= x"0000";
 				reg_src <= x"0000";
+				Wr_Back_Branch_Out <= '0';
 				Subr_Ret_Out <= x"0000";
 				ALU_Result_Out <= x"0000";
 				Wr_Back_Mode_Out <= "00";
 				Immediate_Mode_Out <= '0';
 				ra_idx_out <= "000";
 				Source_Reg_Out <= x"0000";
+				output_en_out <= '0';
+				input_en_out <= '0';
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
 				reg_dest <= Destination_Reg;
 				reg_src <= Source_Reg;
+				Wr_Back_Branch_Out <= Wr_Back_Branch_In;
 				Subr_Ret_Out <= Subr_Ret_In;
 				ALU_Result_Out <= ALU_Result_In;
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
 				Immediate_Mode_Out <= Immediate_Mode_In;
 				ra_idx_out <= ra_idx_in;
 				Source_Reg_Out <= Source_Reg;
+				output_en_out <= output_en_in;
+				input_en_out <= input_en_in;
 			end if;
 		end if;
 	end process;

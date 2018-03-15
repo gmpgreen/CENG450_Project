@@ -50,7 +50,9 @@ entity Decode is
 			  wr_enable : in std_logic;
 			  c1 : out std_logic_vector (3 downto 0);
 			  immediate_mode : out std_logic;
-			  mem_mode : out std_logic_vector(1 downto 0));
+			  mem_mode : out std_logic_vector(1 downto 0);
+			  output_en : out std_logic;
+			  input_en : out std_logic);
 
 end Decode;
 
@@ -109,7 +111,7 @@ with instruction_intrn(15 downto 9) select
 with instruction_intrn(15 downto 9) select
 	rd_index1 <= 	instruction_intrn(5 downto 3) when add_op | sub_op | mul_op | nand_op,
 						instruction_intrn(8 downto 6) when shl_op | shr_op | test_op | 
-						br | br_neg | br_zero | br_sub,
+						br | br_neg | br_zero | br_sub | out_op,
 						"111" when rtn,
 						"000" when others;	
 	rd_index2 <= instruction_intrn(2 downto 0);
@@ -133,6 +135,10 @@ with instruction_intrn(15 downto 9) select
 with instruction(15 downto 9) select	
 	mem_mode <= "10" when load,
 	"00" when others;
+	
+-- Configure input/output
+output_en <= '1' when instruction_intrn(15 downto 9) = out_op else '0';
+input_en <= '1' when instruction_intrn(15 downto 9) = in_op else '0';
 	
 --reg file (Inserted 0 for reset for testing)
 reg_file : entity work.register_file port map('0', clk, rd_index1, 
