@@ -97,7 +97,7 @@ BEGIN
       wait for clk_period;
 		input <= x"0005";
       wait for clk_period;
-		input <= x"0000";
+		input <= x"0022";
       wait for clk_period;
 		input <= x"0001";
       wait for clk_period;

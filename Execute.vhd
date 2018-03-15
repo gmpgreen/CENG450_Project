@@ -54,7 +54,9 @@ entity Execute is
 			  output_en_in : in std_logic;
 			  output_en_out : out std_logic;
 			  input_en_in : in std_logic;
-			  input_en_out : out std_logic);
+			  input_en_out : out std_logic;
+			  input_in : in std_logic_vector(15 downto 0);
+			  input_out : out std_logic_vector(15 downto 0));
 end Execute;
 
 architecture Behavioral of Execute is
@@ -98,6 +100,7 @@ begin
 				ra_idx_out <= "000";
 				output_en <= '0';
 				input_en_out <= '0';
+				input_out <= x"0000";
 			else
 				alu_mode_buf <= ALU_Mode;
 				in1 <= input1;
@@ -112,6 +115,7 @@ begin
 				ra_idx_out <= ra_idx_in;
 				output_en <= output_en_in;
 				input_en_out <= input_en_in;
+				input_out <= input_in;
 			end if;
 		end if;
 	end process;

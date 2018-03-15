@@ -52,7 +52,9 @@ entity Decode is
 			  immediate_mode : out std_logic;
 			  mem_mode : out std_logic_vector(1 downto 0);
 			  output_en : out std_logic;
-			  input_en : out std_logic);
+			  input_en : out std_logic;
+			  input_in : in std_logic_vector;
+			  input_out : out std_logic_vector);
 
 end Decode;
 
@@ -97,7 +99,7 @@ c1 <= instruction_intrn(3 downto 0); --shift
 ra_index <= instruction_intrn(8 downto 6);
 
 branch_mode <= instruction_intrn(11 downto 9);
-branch_en <= '1' when instruction_intrn(15 downto 13) = "100";
+branch_en <= '1' when instruction_intrn(15 downto 13) = "100" else '0';
 
 ALU_Mode <=
 	instruction_intrn(11 downto 9) when instruction_intrn(15 downto 12) = "0000" else
@@ -119,8 +121,8 @@ with instruction_intrn(15 downto 9) select
 typ1_extn <= "1111111" & instruction(8 downto 0) when instruction(8) = '1' else
 				 "0000000" & instruction(8 downto 0);
 
-typ2_extn <= "111111111" & instruction(5 downto 0) when instruction (5) = '1' else
-				 "000000000" & instruction(5 downto 0);
+typ2_extn <= "1111111111" & instruction(5 downto 0) when instruction (5) = '1' else
+				 "0000000000" & instruction(5 downto 0);
 					  
 with instruction_intrn(15 downto 9) select
 	branch_offset(15 downto 0) <= typ1_extn when brr | brr_neg | brr_zero,
@@ -151,9 +153,11 @@ rd_index2, rd_data1, rd_data2, wr_index, wr_data, wr_enable);
 			if (rst = '1') then
 				instruction_intrn <= x"0000";
 				pc_out <= x"0000";
+				input_out <= x"0000";
 			else
 				instruction_intrn <= instruction;
 				pc_out <= pc_in;
+				input_out <= input_in;
 			end if;
 		end if;
 	end process;

@@ -35,7 +35,9 @@ entity Fetch is
 			  branch_enable : in  STD_LOGIC;
            branch_address : in  STD_LOGIC_VECTOR (15 downto 0);
            instruction : out  STD_LOGIC_VECTOR (15 downto 0);
-           instruction_addr : out  STD_LOGIC_VECTOR (15 downto 0));
+           instruction_addr : out  STD_LOGIC_VECTOR (15 downto 0);
+			  input_in : in std_logic_vector(15 downto 0);
+			  input_out : out std_logic_vector(15 downto 0));
 end Fetch;
 
 architecture Behavioral of Fetch is
@@ -61,10 +63,12 @@ begin
 				br_en <= '0';
 				br_addr <= x"0000";
 				PC <= x"0000";
+				input_out <= x"0000";
 			else
 				br_en <= branch_enable;
 				br_addr <= branch_address;
 				PC <= PC_incr;
+				input_out <= input_in;
 			end if;
 		end if;
 	end process;

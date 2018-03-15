@@ -52,7 +52,9 @@ entity Memory is
 			  output_en_in : in std_logic;
 			  output_en_out : out std_logic;
 			  input_en_in : in std_logic;
-			  input_en_out : out std_logic);
+			  input_en_out : out std_logic;
+			  input_in : in std_logic_vector(15 downto 0);
+			  input_out : out std_logic_vector(15 downto 0));
 end Memory;
 
 architecture Behavioral of Memory is
@@ -87,6 +89,7 @@ begin
 				Source_Reg_Out <= x"0000";
 				output_en_out <= '0';
 				input_en_out <= '0';
+				input_out <= x"0000";
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
@@ -101,6 +104,7 @@ begin
 				Source_Reg_Out <= Source_Reg;
 				output_en_out <= output_en_in;
 				input_en_out <= input_en_in;
+				input_out <= input_in;
 			end if;
 		end if;
 	end process;

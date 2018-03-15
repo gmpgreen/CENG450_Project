@@ -93,8 +93,8 @@ begin
 	-- Determine whether its a relative or absolute branch
 	with branch_mode_intrn select
 		muxed_relative_addr <=
-			br_instr_addr_intrn when brr | brr_n | brr_z,
-			reg_val when others;
+			br_instr_addr_intrn(15 downto 1) & '0' when brr | brr_n | brr_z,
+			reg_val_intrn(15 downto 1) & '0' when others;
 	
 	-- Calculate the branch address
 	first_adder : entity work.Adder_16bit port map(muxed_relative_addr, branch_offset_intrn, first_adder_output);
