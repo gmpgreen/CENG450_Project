@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   18:20:04 02/28/2018
+-- Create Date:   17:21:56 03/14/2018
 -- Design Name:   
--- Module Name:   C:/Users/gmpgreen/CENG450_Project/Pipeline_TB.vhd
+-- Module Name:   C:/Users/lymacasm.UVIC.000/CENG450_Project/Pipeline_TB.vhd
 -- Project Name:  RegFile_ALU
 -- Target Device:  
 -- Tool versions:  
@@ -42,7 +42,9 @@ ARCHITECTURE behavior OF Pipeline_TB IS
     COMPONENT Pipeline
     PORT(
          clk : IN  std_logic;
-         rst : IN  std_logic
+         rst : IN  std_logic;
+         input : IN  std_logic_vector(15 downto 0);
+         output : OUT  std_logic_vector(15 downto 0)
         );
     END COMPONENT;
     
@@ -50,6 +52,10 @@ ARCHITECTURE behavior OF Pipeline_TB IS
    --Inputs
    signal clk : std_logic := '0';
    signal rst : std_logic := '0';
+   signal input : std_logic_vector(15 downto 0) := (others => '0');
+
+ 	--Outputs
+   signal output : std_logic_vector(15 downto 0);
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -59,7 +65,9 @@ BEGIN
 	-- Instantiate the Unit Under Test (UUT)
    uut: Pipeline PORT MAP (
           clk => clk,
-          rst => rst
+          rst => rst,
+          input => input,
+          output => output
         );
 
    -- Clock process definitions
@@ -75,11 +83,28 @@ BEGIN
    -- Stimulus process
    stim_proc: process
    begin		
-      -- hold reset state for 100 ns.	
+      -- hold reset state for 100 ns.
 		rst <= '1';
-      wait for 100 ns;
+      wait for 100 ns;	
 		rst <= '0';
-      wait for clk_period*10;
+		
+		-- Initialize the register file
+		input <= x"0002";
+      wait for clk_period;
+		input <= x"0003";
+      wait for clk_period;
+		input <= x"0001";
+      wait for clk_period;
+		input <= x"0005";
+      wait for clk_period;
+		input <= x"0000";
+      wait for clk_period;
+		input <= x"0001";
+      wait for clk_period;
+		input <= x"0005";
+      wait for clk_period;
+		input <= x"0000";
+		wait for clk_period;
 		
       -- insert stimulus here 
 

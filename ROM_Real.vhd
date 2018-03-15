@@ -46,6 +46,19 @@ architecture Behavioral of ROM is
 	constant shl_op : std_logic_vector(6 downto 0)  := "0000101";
 	constant shr_op : std_logic_vector(6 downto 0)  := "0000110";
 	constant test_op : std_logic_vector(6 downto 0) := "0000111";
+	constant out_op : std_logic_vector(6 downto 0)  := "0100000";
+	constant in_op : std_logic_vector(6 downto 0)   := "0100001";
+	constant load_imm : std_logic_vector(6 downto 0):= "0010010";
+	constant load : std_logic_vector(6 downto 0)		:= "0010000";
+	constant store : std_logic_vector(6 downto 0)	:= "0010001";
+	constant brr : std_logic_vector(6 downto 0) 		:= "1000000";
+	constant brr_neg : std_logic_vector(6 downto 0) := "1000001";
+	constant brr_zero : std_logic_vector(6 downto 0):= "1000010";
+	constant br : std_logic_vector(6 downto 0) 		:= "1000011";
+	constant br_neg : std_logic_vector(6 downto 0) 	:= "1000100";
+	constant br_zero : std_logic_vector(6 downto 0) := "1000101";
+	constant br_sub : std_logic_vector(6 downto 0) 	:= "1000110"; 
+	constant rtn	: std_logic_vector(6 downto 0)	:= "1000111";
 	
 	-- Next byte
 	signal odd_byte : std_logic_vector(15 downto 0);
@@ -54,6 +67,30 @@ architecture Behavioral of ROM is
 	type ROM_TYPE is array (0 to 255) of std_logic_vector (7 downto 0);
 
 	constant rom_content : ROM_TYPE := (
+		in_op  & "0", "00000000", -- R0 = 02
+		in_op  & "0", "01000000", -- R1 = 03
+		in_op  & "0", "10000000", -- R2 = 01
+		in_op  & "0", "11000000", -- R3 = 05
+		in_op  & "1", "00000000", -- R4 = 00
+		in_op  & "1", "01000000", -- R5 = 01
+		in_op  & "1", "10000000", -- R6 = 05
+		in_op  & "1", "11000000", -- R7 = 00
+		out_op & "0", "00000000",
+		out_op & "0", "01000000",
+		out_op & "0", "10000000",
+		out_op & "0", "11000000",
+		out_op & "1", "00000000",
+		out_op & "1", "01000000",
+		out_op & "1", "10000000",
+		out_op & "1", "11000000",
+		br_sub & "1", "00000001", -- Store return address, go to subroutine
+		brr    & "1", "11111111", -- infinite loop (at program's end)
+		add_op & "0", "10001101", -- Start of subroutine. Runs 5 times, R2 <-- R1 + 1
+		sub_op & "1", "10110101", -- R6 <-- R6 - 1 (loop counter)
+		test_op & "1","10000000", -- Check R6
+		br_zero & "1", "00000001", -- Branch if R6 was zero to R4 + 1
+		brr     & "1", "11111011", -- Jump to begining of subroutine
+		rtn     & "0", "00000000", -- Return to the infinite loop
 		test_op & "0", "00000000", -- TEST r0
 		test_op & "1", "00000000", -- TEST r4
 		nop_op & "0", "00000000",
@@ -74,113 +111,89 @@ architecture Behavioral of ROM is
 		add_op & "0", "10" & "100" & "001", -- ADD r2,r4,r1
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
-		shl_op & "1", "00" & "00" & "0100", -- SHL r4#4
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
 		"00000000", "00000000");
 begin
 
