@@ -136,10 +136,8 @@ with instruction_intrn (15 downto 9) select
 	'0' when others;
 with instruction_intrn(15 downto 9) select	
 	mem_mode <= "11" when store,
-	"00" when others;
-with instruction(15 downto 9) select	
-	mem_mode <= "10" when load,
-	"00" when others;
+					"10" when load,
+					"00" when others;
 	
 -- Configure input/output
 output_en <= '1' when instruction_intrn(15 downto 9) = out_op else '0';
