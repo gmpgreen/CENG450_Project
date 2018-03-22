@@ -54,7 +54,8 @@ entity Decode is
 			  output_en : out std_logic;
 			  input_en : out std_logic;
 			  input_in : in std_logic_vector;
-			  input_out : out std_logic_vector);
+			  input_out : out std_logic_vector;
+			  raw_detected : out std_logic);
 
 end Decode;
 
@@ -68,6 +69,8 @@ signal relative_disp : STD_LOGIC_VECTOR (6 downto 0);
 signal absolute_disp : STD_LOGIC_VECTOR (6 downto 0);
 signal typ1_extn : STD_LOGIC_VECTOR (15 downto 0);
 signal typ2_extn : STD_LOGIC_VECTOR (15 downto 0);
+signal ra_index_intrn : std_logic_vector(2 downto 0);
+signal future_write_enable : std_logic;
 
 -- Op Codes
 constant nop_op : std_logic_vector(6 downto 0)  := "0000000";
@@ -83,6 +86,7 @@ constant in_op : std_logic_vector(6 downto 0)   := "0100001";
 constant load_imm : std_logic_vector(6 downto 0):= "0010010";
 constant load : std_logic_vector(6 downto 0)		:= "0010000";
 constant store : std_logic_vector(6 downto 0)	:= "0010001";
+constant mov : std_logic_vector(6 downto 0)		:= "0010011";
 constant brr : std_logic_vector(6 downto 0) 			:= "1000000";
 constant brr_neg : std_logic_vector(6 downto 0) 	:= "1000001";
 constant brr_zero : std_logic_vector(6 downto 0) 	:= "1000010";
@@ -97,7 +101,15 @@ begin
 --signal assignments--
 
 c1 <= instruction_intrn(3 downto 0); --shift
-ra_index <= instruction_intrn(8 downto 6);
+ra_index_intrn <= "111" when(instruction_intrn(15 downto 9) = br_sub) else instruction_intrn(8 downto 6);
+ra_index <= ra_index_intrn;
+
+-- Signal used for RAW detection. Try and see if we are intending to write.
+with instruction_intrn(15 downto 9) select
+	future_write_enable <=
+		'1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op |
+			br_sub | load | load_imm | mov,
+		'0' when others;
 
 branch_mode <= instruction_intrn(11 downto 9);
 branch_en <= '1' when instruction_intrn(15 downto 13) = "100" else '0';
@@ -145,7 +157,8 @@ input_en <= '1' when instruction_intrn(15 downto 9) = in_op else '0';
 	
 --reg file (Inserted 0 for reset for testing)
 reg_file : entity work.register_file port map('0', clk, rd_index1, 
-rd_index2, rd_data1, rd_data2, wr_index, wr_data, wr_enable);
+	rd_index2, rd_data1, rd_data2, wr_index, wr_data, wr_enable, ra_index_intrn, 
+	future_write_enable, raw_detected);
 	
 --latching		
 	process(clk)

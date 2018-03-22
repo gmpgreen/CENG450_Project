@@ -37,6 +37,8 @@ entity Pipeline is
 end Pipeline;
 
 architecture Behavioral of Pipeline is
+-- Clock signals
+signal clk_fetch : std_logic;
 
 -- Reset signals
 signal rst_decode : std_logic;
@@ -71,6 +73,7 @@ signal mem_mode_d : std_logic_vector(1 downto 0);
 signal output_en_d : std_logic;
 signal input_en_d : std_logic;
 signal input_d : std_logic_vector(15 downto 0);
+signal raw_detected : std_logic;
 
 -- Execute output signals
 signal z : std_logic;
@@ -107,13 +110,13 @@ signal wr_en : std_logic;
 
 begin
 	-- Setup the fetch stage
-	Fetch : entity work.fetch port map(rst, clk, branch_enable_b, branch_addr_b, instruction, PC_f, 
+	Fetch : entity work.fetch port map(rst, clk_fetch, branch_enable_b, branch_addr_b, instruction, PC_f, 
 		input, input_f);
 	
 	-- Setup the decode stage
 	Decode : entity work.decode port map(rst_decode, clk, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
 		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
-		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d);
+		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d, raw_detected);
 		
 	-- Setup the branch stage
 	Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
@@ -137,9 +140,19 @@ begin
 		output, input_en_m, input_m); 
 		
 	-- Reset the decode, execute and branch latches when a branch is taken
+	-- Insert bubble in execute when RAW hazard is detected
 	rst_decode <= '1' when branch_enable_b = '1' else rst;
-	rst_execute <= '1' when branch_enable_b = '1' else rst;
 	rst_branch <= '1' when branch_enable_b = '1' else rst;
+	rst_execute <= 
+		'1' when branch_enable_b = '1' else 
+		'1' when raw_detected = '1' else
+		rst;
+	
+	-- Freeze the fetch clock when RAW hazard is detected
+	clk_fetch <= 
+		clk when branch_enable_b = '1' else
+		'0' when raw_detected = '1' else
+		clk;
 
 end Behavioral;
 
