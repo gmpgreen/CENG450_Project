@@ -85,25 +85,26 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
 		rst <= '1';
-      wait for 100 ns;	
+      wait for 100 ns;
+		wait for clk_period/2;
 		rst <= '0';
 		
 		-- Initialize the register file
-		input <= x"0002";
+		input <= x"0002"; -- R0
       wait for clk_period;
-		input <= x"0003";
+		input <= x"0003"; -- R1
       wait for clk_period;
-		input <= x"0001";
+		input <= x"0001"; -- R2
       wait for clk_period;
-		input <= x"0005";
+		input <= x"0005"; -- R3
       wait for clk_period;
-		input <= x"0022";
+		input <= x"0022"; -- R4
       wait for clk_period;
-		input <= x"0001";
+		input <= x"0001"; -- R5
       wait for clk_period;
-		input <= x"0005";
+		input <= x"0005"; -- R6
       wait for clk_period;
-		input <= x"0000";
+		input <= x"0000"; -- R7
 		wait for clk_period;
 		
       -- insert stimulus here 
