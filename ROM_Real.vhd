@@ -67,6 +67,7 @@ architecture Behavioral of ROM is
 	type ROM_TYPE is array (0 to 255) of std_logic_vector (7 downto 0);
 
 	constant rom_content : ROM_TYPE := (
+		nop_op & "0", "00000000",
 		in_op  & "0", "00000000", -- R0 = 02
 		in_op  & "0", "01000000", -- R1 = 03
 		in_op  & "0", "10000000", -- R2 = 01
@@ -75,6 +76,12 @@ architecture Behavioral of ROM is
 		in_op  & "1", "01000000", -- R5 = 01
 		in_op  & "1", "10000000", -- R6 = 05
 		in_op  & "1", "11000000", -- R7 = 00
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
+		nop_op & "0", "00000000",
 		out_op & "0", "00000000",
 		out_op & "0", "01000000",
 		out_op & "0", "10000000",
@@ -95,7 +102,6 @@ architecture Behavioral of ROM is
 		test_op & "1", "00000000", -- TEST r4
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
 		add_op & "1", "00" & "000" & "001", -- ADD r4,r0,r1
 		shl_op & "0", "01" & "00" & "0100", -- SHL r1#4
 		shl_op & "1", "10" & "00" & "1101", -- SHL r6#13
@@ -109,12 +115,6 @@ architecture Behavioral of ROM is
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
 		add_op & "0", "10" & "100" & "001", -- ADD r2,r4,r1
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",

@@ -50,10 +50,16 @@ architecture Behavioral of Fetch is
 
 begin
 
-	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);
+	-- Chose between PC and branch address for current instruction
 	Instr_Addr_Selector : entity work.mux2_16 port map(PC, br_addr, br_en, instr_addr);
+	
+	-- Get instruction from ROM
 	rom : entity work.rom port map(instr_addr, instruction);
 	
+	-- Prepare the incremented PC
+	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);
+	
+	-- Update output address
 	instruction_addr <= instr_addr;
 	
 	process(clk)
