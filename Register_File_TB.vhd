@@ -49,7 +49,10 @@ ARCHITECTURE behavior OF Register_File_TB IS
          rd_data2 : OUT  std_logic_vector(15 downto 0);
          wr_index : IN  std_logic_vector(2 downto 0);
          wr_data : IN  std_logic_vector(15 downto 0);
-         wr_enable : IN  std_logic
+         wr_enable : IN  std_logic;
+			desired_wr_idx: in std_logic_vector(2 downto 0);
+			desired_wr_en: in std_logic;
+			raw_detected: out std_logic
         );
     END COMPONENT;
     
@@ -62,10 +65,13 @@ ARCHITECTURE behavior OF Register_File_TB IS
    signal wr_index : std_logic_vector(2 downto 0) := (others => '0');
    signal wr_data : std_logic_vector(15 downto 0) := (others => '0');
    signal wr_enable : std_logic := '0';
+	signal desired_wr_idx: std_logic_vector(2 downto 0) := "000";
+	signal desired_wr_en: std_logic := '0';
 
  	--Outputs
    signal rd_data1 : std_logic_vector(15 downto 0);
    signal rd_data2 : std_logic_vector(15 downto 0);
+	signal raw_detected: std_logic;
 
    -- Clock period definitions
    constant clk_period : time := 10 ns;
@@ -82,7 +88,10 @@ BEGIN
           rd_data2 => rd_data2,
           wr_index => wr_index,
           wr_data => wr_data,
-          wr_enable => wr_enable
+          wr_enable => wr_enable,
+			 desired_wr_idx => desired_wr_idx,
+			 desired_wr_en => desired_wr_en,
+			 raw_detected => raw_detected
         );
 
    -- Clock process definitions
@@ -109,14 +118,18 @@ BEGIN
 		wr_index <= "010";
 		wr_enable <= '1';
 		wr_data <= x"1515";
+		desired_wr_idx <= "100";
+		desired_wr_en <= '1';
 		wait for clk_period;
-		
+		desired_wr_idx <= "000";
 		wr_index <= "100";
 		wr_data <= x"FF66";
-		wait for clk_period * 2;
-
+		wait for clk_period * 3;
+		desired_wr_idx <= "111";
 		rd_index1 <= "000";
 		rd_index2 <= "111";
+		wait for clk_period * 2;
+		desired_wr_en <= '0';
 
       wait;
    end process;
