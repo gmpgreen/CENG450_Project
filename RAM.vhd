@@ -30,7 +30,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity RAM is
-    Port ( RW_Enable : in  STD_LOGIC;
+    Port ( 
+			  rst : in STD_LOGIC;
+			  clk : in STD_LOGIC;
+			  RW_Enable : in  STD_LOGIC;
            Address : in  STD_LOGIC_VECTOR (15 downto 0);
            WR_Data : in  STD_LOGIC_VECTOR (15 downto 0);
            RD_Data : out  STD_LOGIC_VECTOR (15 downto 0));
@@ -38,8 +41,29 @@ end RAM;
 
 architecture Behavioral of RAM is
 
+signal internal_enable : STD_LOGIC;
+signal addr_sig : STD_LOGIC_VECTOR(15 downto 0);
+signal write_sig : STD_LOGIC_VECTOR(15 downto 0);
+
+type RAM_type is array (0 to 255) of std_logic_vector (15 downto 0);
+
 begin
 
+--latch	
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if (rst = '1') then
+				RW_Enable <= '0';
+				Address <= x"0000";
+				WR_Data  <= x"0000";
+			else
+				internal_enable <= RW_Enable;
+				addr_sig <= Address;
+				write_sig <= WR_Data;
+			end if;
+		end if;
+	end process;
 
 end Behavioral;
 
