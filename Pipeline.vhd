@@ -74,6 +74,8 @@ signal output_en_d : std_logic;
 signal input_en_d : std_logic;
 signal input_d : std_logic_vector(15 downto 0);
 signal raw_detected : std_logic;
+signal desired_write_idx : std_logic_vector(2 downto 0);
+signal counter_start_en : std_logic;
 
 -- Execute output signals
 signal z : std_logic;
@@ -116,7 +118,8 @@ begin
 	-- Setup the decode stage
 	Decode : entity work.decode port map(rst_decode, clk, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
 		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
-		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d, raw_detected);
+		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d,
+		desired_write_idx, desired_write_idx, counter_start_en, counter_start_en, raw_detected);
 		
 	-- Setup the branch stage
 	Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
