@@ -41,22 +41,56 @@ end RAM;
 
 architecture Behavioral of RAM is
 
-signal internal_enable : STD_LOGIC;
-signal addr_sig : STD_LOGIC_VECTOR(15 downto 0);
-signal write_sig : STD_LOGIC_VECTOR(15 downto 0);
+	signal internal_enable : STD_LOGIC;
+	signal addr_sig : STD_LOGIC_VECTOR(15 downto 0);
+	signal write_sig : STD_LOGIC_VECTOR(15 downto 0);
 
-type RAM_type is array (0 to 255) of std_logic_vector (15 downto 0);
+	type RAM_type is array (0 to 127) of std_logic_vector (15 downto 0);
+	RAM_type : RAM_Type := (
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+		x"0000", x"0000", x"0000", x"0000",
+	);
 
 begin
 
---latch	
+	--latch	
 	process(clk)
 	begin
 		if rising_edge(clk) then
 			if (rst = '1') then
-				RW_Enable <= '0';
-				Address <= x"0000";
-				WR_Data  <= x"0000";
+				internal_enable <= '0';
+				addr_sig <= x"0000";
+				write_sig  <= x"0000";
 			else
 				internal_enable <= RW_Enable;
 				addr_sig <= Address;
