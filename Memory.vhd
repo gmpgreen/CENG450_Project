@@ -33,6 +33,7 @@ entity Memory is
     Port ( rst : in  STD_LOGIC; 
            clk : in  STD_LOGIC;
 			  Mem_Mode : in  STD_LOGIC_VECTOR(1 downto 0);
+			  Mem_RAW_Hazard : out std_logic;
 			  Destination_Reg : in std_logic_vector(15 downto 0);
 			  Source_Reg : in std_logic_vector(15 downto 0);
 			  Source_Reg_Out : out std_logic_vector(15 downto 0);
@@ -54,13 +55,15 @@ entity Memory is
 			  input_en_in : in std_logic;
 			  input_en_out : out std_logic;
 			  input_in : in std_logic_vector(15 downto 0);
-			  input_out : out std_logic_vector(15 downto 0));
+			  input_out : out std_logic_vector(15 downto 0);
+			  writeback_future : out std_logic_vector(15 downto 0));
 end Memory;
 
 architecture Behavioral of Memory is
 
 signal read_write : std_logic;
 signal mem_en : std_logic; -- Read when 0, Write when 1
+signal mem_mode_intrn : std_logic_vector(1 downto 0);
 signal addr : std_logic_vector(15 downto 0);
 signal reg_dest : std_logic_vector(15 downto 0);
 signal reg_src : std_logic_vector(15 downto 0);
@@ -70,6 +73,8 @@ begin
 
 	addr <= reg_dest when (read_write = '1') else reg_src;
 	write_data <= reg_src;
+	
+	Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
 
 	process(clk)
 	begin
@@ -77,6 +82,7 @@ begin
 			if (rst = '1') then
 				read_write <= '0';
 				mem_en <= '0';
+				mem_mode_intrn <= "00";
 				addr <= x"0000";
 				reg_dest <= x"0000";
 				reg_src <= x"0000";
@@ -93,6 +99,7 @@ begin
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
+				mem_mode_intrn <= Mem_Mode;
 				reg_dest <= Destination_Reg;
 				reg_src <= Source_Reg;
 				Wr_Back_Branch_Out <= Wr_Back_Branch_In;

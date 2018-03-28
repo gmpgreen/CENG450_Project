@@ -59,7 +59,8 @@ entity Decode is
 			  desired_write_in : in std_logic_vector(2 downto 0);
 			  counter_start_out : out std_logic;
 			  counter_start_in : in std_logic;
-			  raw_detected : out std_logic);
+			  raw_position_1 : out std_logic_vector(1 downto 0);
+			  raw_position_2 : out std_logic_vector(1 downto 0));
 
 end Decode;
 
@@ -119,47 +120,19 @@ c1 <= instruction_intrn(3 downto 0); --shift
 ra_index_intrn <= "111" when(instruction_intrn(15 downto 9) = br_sub) else instruction_intrn(8 downto 6);
 ra_index <= ra_index_intrn;
 
--- Signals used for RAW detection. Try and see if we are intending to write.
--- When we are reading, we start a counter at the next cycle.
--- Make sure we are reading this cycle, and see if we have a read hazard based on that
-desired_write_out <= wr_index;
--- Check if we're reading from rd_idx1
-with instruction_intrn(15 downto 9) select
-	rd_enable_1 <=
-		'1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op |
-			out_op | br | br_neg | br_zero | br_sub | rtn | load | store | mov,
-		'0' when others;
--- Check if we're reading from rd_idx2
-with instruction_intrn(15 downto 9) select
-	rd_enable_2 <= 
-		'1' when add_op | sub_op | mul_op | nand_op,
-		'0' when others;
--- Check if we're going to writeback in the future
+-- Get the current write index to start RAW countdowns
+desired_write_out <= ra_index_intrn;
+
+-- Check if writing is going to be used by this instruction in the future
 with instruction_intrn(15 downto 9) select
 	counter_start_out <=
 		'1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | in_op |
 			br_sub | load | load_imm | mov,
 		'0' when others;
--- Check if we're at risk for a RAW purely from instruction for rd_idx1
-raw_danger_1 <= 
-	'1' when( raw_tracker(to_integer(unsigned(rd_index1))) /= "00" ) else
-	'0';
--- Check if we're at risk for a RAW purely from instruction for rd_idx2
-raw_danger_2 <=
-	'1' when( raw_tracker(to_integer(unsigned(rd_index2))) /= "00" ) else
-	'0';
--- AND operation with the rd_enables
-raw_hazard_1 <=
-	raw_danger_1 when rd_enable_1 = '1' else
-	'0';
-raw_hazard_2 <=
-	raw_danger_2 when rd_enable_2 = '1' else
-	'0';
--- Output of both ANDs goes to this OR operation
-raw_detected <=
-	raw_hazard_1 when raw_hazard_1 = '1' else
-	raw_hazard_2 when raw_hazard_2 = '1' else
-	'0';
+		
+-- Get the RAW countdown for the current read index
+raw_position_1 <= raw_tracker(to_integer(unsigned(rd_index1)));
+raw_position_2 <= raw_tracker(to_integer(unsigned(rd_index2)));
 
 -- Branching signals
 branch_mode <= instruction_intrn(11 downto 9);
@@ -168,10 +141,11 @@ branch_en <= '1' when instruction_intrn(15 downto 13) = "100" else '0';
 ALU_Mode <=
 	instruction_intrn(11 downto 9) when instruction_intrn(15 downto 12) = "0000" else
 	"000";
---select shift operation
+-- Select Writeback Mode
 with instruction_intrn(15 downto 9) select
 	Writeback_Mode <= "00" when test_op | out_op,
 	"01" when others;
+--select shift operation
 with instruction_intrn(15 downto 9) select
 	Immediate <= "00000001" when shl_op | shr_op,
 	"00000000" when others;

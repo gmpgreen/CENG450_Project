@@ -76,6 +76,8 @@ signal input_d : std_logic_vector(15 downto 0);
 signal raw_detected : std_logic;
 signal desired_write_idx : std_logic_vector(2 downto 0);
 signal counter_start_en : std_logic;
+signal raw_pos_1 : std_logic_vector(1 downto 0);
+signal raw_pos_2 : std_logic_vector(1 downto 0);
 
 -- Execute output signals
 signal z : std_logic;
@@ -104,6 +106,8 @@ signal ra_idx_m : std_logic_vector(2 downto 0);
 signal output_en_m : std_logic;
 signal input_en_m : std_logic;
 signal input_m : std_logic_vector(15 downto 0);
+signal writeback_future : std_logic_vector(15 downto 0);
+signal raw_detected : std_logic;
 
 -- Writeback output signals
 signal wr_idx : std_logic_vector(2 downto 0);
@@ -119,7 +123,7 @@ begin
 	Decode : entity work.decode port map(rst_decode, clk, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
 		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
 		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d,
-		desired_write_idx, desired_write_idx, counter_start_en, counter_start_en, raw_detected);
+		desired_write_idx, desired_write_idx, counter_start_en, counter_start_en, raw_pos_1, raw_pos_2);
 		
 	-- Setup the branch stage
 	Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
@@ -129,7 +133,7 @@ begin
 	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, z, n, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
-		input_d, input_e);
+		input_d, input_e, raw_pos_1, raw_pos_2);
 		
 	-- Setup the memory stage
 	Memory : entity work.memory port map(rst, clk, mem_mode_e, reg1_val, reg2_val, src_reg, mem_read_data, 
