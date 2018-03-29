@@ -31,7 +31,6 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity RAM is
     Port ( 
-			  rst : in STD_LOGIC;
 			  clk : in STD_LOGIC;
 			  RW_Enable : in  STD_LOGIC;
            Address : in  STD_LOGIC_VECTOR (15 downto 0);
