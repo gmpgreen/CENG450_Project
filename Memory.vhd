@@ -67,7 +67,10 @@ signal reg_src : std_logic_vector(15 downto 0);
 signal write_data : std_logic_vector(15 downto 0);
 
 begin
-
+	
+	RAM : entity work.RAM port map(clk, read_write, addr, write_data, 
+	Read_Data); 
+	
 	addr <= reg_dest when (read_write = '1') else reg_src;
 	write_data <= reg_src;
 
