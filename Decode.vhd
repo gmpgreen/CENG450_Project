@@ -64,6 +64,7 @@ architecture Behavioral of Decode is
 
 -- RAW Detection
 type counter_array is array (integer range 0 to 7) of std_logic_vector(1 downto 0);
+signal raw_start_tracking : counter_array;
 signal raw_tracker : counter_array;
 signal rd_enable_1 : std_logic;
 signal rd_enable_2 : std_logic;
@@ -197,27 +198,27 @@ reg_file : entity work.register_file port map(rst, clk, rd_index1,
 				-- Set up signals for the counters
 				case instruction(15 downto 9) is
 					when br_sub	=> 
-						raw_tracker(7) <= "10";
+						raw_start_tracking(7) <= "11";
 					when add_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when sub_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when mul_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when nand_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when shl_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when shr_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when in_op =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when load =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when load_imm =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when mov =>
-						raw_tracker(to_integer(unsigned(instruction(8 downto 6)))) <= "10";
+						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when others => 
 				end case;
 		
@@ -225,6 +226,10 @@ reg_file : entity work.register_file port map(rst, clk, rd_index1,
 				for i in 0 to 7 loop
 					if(raw_tracker(i) /= "00") then
 						raw_tracker(i) <= std_logic_vector(unsigned(raw_tracker(i)) - 1);
+					end if;
+					if(raw_start_tracking(i) = "11") then
+						raw_tracker(i) <= raw_start_tracking(i);
+						raw_start_tracking(i) <= "00";
 					end if;
 				end loop;
 				
