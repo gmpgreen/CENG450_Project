@@ -60,7 +60,9 @@ entity Execute is
 			  raw_position_1 : in std_logic_vector(1 downto 0);
 			  raw_position_2 : in std_logic_vector(1 downto 0);
 			  writeback_memory : in std_logic_vector(15 downto 0);
-			  writeback_writeback : in std_logic_vector(15 downto 0));
+			  writeback_writeback : in std_logic_vector(15 downto 0);
+			  writeback_execute : in std_logic_vector(15 downto 0);
+			  writeback_future : out std_logic_vector(15 downto 0));
 end Execute;
 
 architecture Behavioral of Execute is
@@ -70,6 +72,7 @@ signal in1 : std_logic_vector(15 downto 0);
 signal in2 : std_logic_vector(15 downto 0);
 signal wrback_mem : std_logic_vector(15 downto 0);
 signal wrback_wrback : std_logic_vector(15 downto 0);
+signal wrback_ex : std_logic_vector(15 downto 0);
 signal c1 : std_logic_vector(15 downto 0);
 signal muxed_in2 : std_logic_vector(15 downto 0);
 signal muxed_in1 : std_logic_vector(15 downto 0);
@@ -77,25 +80,36 @@ signal alu_result_buf : std_logic_vector(15 downto 0);
 signal output_en : std_logic;
 signal raw_pos_1 : std_logic_vector(1 downto 0);
 signal raw_pos_2 : std_logic_vector(1 downto 0);
-
+signal input_inner : std_logic_vector(15 downto 0);
+signal input_en : std_logic;
+signal wr_mode : std_logic_vector(1 downto 0);
 
 begin
 
-	ALU : entity work.alu port map(in1, muxed_in2, alu_mode_buf, clk, rst, alu_result_buf, Z, N);
+	ALU : entity work.alu port map(muxed_in1, muxed_in2, alu_mode_buf, clk, rst, alu_result_buf, Z, N);
 	
 	-- Used for both result and output
 	ALU_Result <= alu_result_buf when output_en = '0' else in1;
 	
+	-- Find the future writeback
+	writeback_future <=
+		--sub_ret when wr_branch = '1' else
+		input_inner when input_en = '1' else
+		alu_result_buf when wr_mode /= "00" else
+		x"0000";
+	
 	-- Choose input 1 for ALU, while avoiding RAW conditions
 	muxed_in1 <= 
-		wrback_mem when raw_position_1 = "10" else
-		wrback_wrback when raw_position_1 = "01" else
+		wrback_ex when raw_pos_1 = "11" else
+		wrback_mem when raw_pos_1 = "10" else
+		wrback_wrback when raw_pos_1 = "01" else
 		in1;
 	
 	-- Choose input 2 for ALU, while avoiding RAW conditions
 	muxed_in2 <= 
-		wrback_mem when raw_position_2 = "10" else
-		wrback_wrback when raw_position_2 = "01" else
+		wrback_ex when raw_pos_2 = "11" else
+		wrback_mem when raw_pos_2 = "10" else
+		wrback_wrback when raw_pos_2 = "01" else
 		c1 when alu_mode_buf = "101" else
 		c1 when alu_mode_buf = "110" else
 		in2;
@@ -122,8 +136,12 @@ begin
 				input_out <= x"0000";
 				wrback_mem <= x"0000";
 				wrback_wrback <= x"0000";
+				wrback_ex <= x"0000";
 				raw_pos_1 <= "00";
 				raw_pos_2 <= "00";
+				input_inner <= x"0000";
+				input_en <= '0';
+				wr_mode <= "00";
 			else
 				alu_mode_buf <= ALU_Mode;
 				in1 <= input1;
@@ -141,8 +159,12 @@ begin
 				input_out <= input_in;
 				wrback_mem <= writeback_memory;
 				wrback_wrback <= writeback_writeback;
+				wrback_ex <= writeback_execute;
 				raw_pos_1 <= raw_position_1;
 				raw_pos_2 <= raw_position_2;
+				input_inner <= input_in;
+				input_en <= input_en_in;
+				wr_mode <= Wr_Back_Mode_In;
 			end if;
 		end if;
 	end process;

@@ -91,6 +91,7 @@ signal reg2_val : std_logic_vector(15 downto 0);
 signal output_en_e : std_logic;
 signal input_en_e : std_logic;
 signal input_e : std_logic_vector(15 downto 0);
+signal writeback_e : std_logic_vector(15 downto 0);
 
 -- Memory output signals
 signal mem_read_data : std_logic_vector(15 downto 0);
@@ -104,7 +105,7 @@ signal ra_idx_m : std_logic_vector(2 downto 0);
 signal output_en_m : std_logic;
 signal input_en_m : std_logic;
 signal input_m : std_logic_vector(15 downto 0);
-signal writeback_future : std_logic_vector(15 downto 0);
+signal writeback_m : std_logic_vector(15 downto 0);
 signal raw_detected : std_logic;
 
 -- Writeback output signals
@@ -131,13 +132,13 @@ begin
 	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, z, n, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
-		input_d, input_e, raw_pos_1, raw_pos_2, writeback_future, wr_data);
+		input_d, input_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e);
 		
 	-- Setup the memory stage
 	Memory : entity work.memory port map(rst_memory, clk, mem_mode_e, raw_detected, reg1_val, reg2_val, src_reg, mem_read_data, 
 		wrback_en_b, wrback_en_m, subroutine_ret_b, subroutine_ret_m, alu_result_e, alu_result_m, wrback_mode_e, 
 		wrback_mode_m, imm_mode_e, imm_mode_m, ra_idx_e, ra_idx_m, output_en_e, output_en_m, 
-		input_en_e, input_en_m, input_e, input_m, writeback_future);
+		input_en_e, input_en_m, input_e, input_m, writeback_m);
 		
 	-- Setup the writeback stage
 	Writeback : entity work.writeback port map(rst, clk, wrback_mode_m, ra_idx_m, alu_result_m, 
