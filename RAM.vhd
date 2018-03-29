@@ -22,7 +22,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
@@ -40,64 +40,25 @@ entity RAM is
 end RAM;
 
 architecture Behavioral of RAM is
-
-	signal internal_enable : STD_LOGIC;
-	signal addr_sig : STD_LOGIC_VECTOR(15 downto 0);
-	signal write_sig : STD_LOGIC_VECTOR(15 downto 0);
-
-	type RAM_type is array (0 to 127) of std_logic_vector (15 downto 0);
-	RAM_type : RAM_Type := (
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-		x"0000", x"0000", x"0000", x"0000",
-	);
+	
+	type RAM_type is array (0 to 1024) of std_logic_vector (15 downto 0);
+	
+	signal RAM_memory : RAM_type;
 
 begin
 
-	--latch	
+	
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			if (rst = '1') then
-				internal_enable <= '0';
-				addr_sig <= x"0000";
-				write_sig  <= x"0000";
+			if (RW_Enable = '1') then
+				RAM_memory(to_integer(unsigned('0' & Address(15 downto 1)))) <= WR_Data;
 			else
-				internal_enable <= RW_Enable;
-				addr_sig <= Address;
-				write_sig <= WR_Data;
+				RD_Data <= RAM_memory(to_integer(unsigned('0' & Address(15 downto 1))));
 			end if;
 		end if;
 	end process;
-
+	
+	
 end Behavioral;
 
