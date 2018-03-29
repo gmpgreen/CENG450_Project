@@ -98,7 +98,6 @@ begin
 				read_write <= '0';
 				mem_en <= '0';
 				mem_mode_intrn <= "00";
-				addr <= x"0000";
 				reg_dest <= x"0000";
 				reg_src <= x"0000";
 				Wr_Back_Branch_Out <= '0';
