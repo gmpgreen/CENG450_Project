@@ -87,7 +87,6 @@ BEGIN
 		rst <= '1';
       wait for 100 ns;
 		rst <= '0';
-		wait for clk_period/2;
 		
 		-- Initialize the register file
 		input <= x"0002"; -- R0
