@@ -44,6 +44,7 @@ signal clk_fetch : std_logic;
 signal rst_decode : std_logic;
 signal rst_execute : std_logic;
 signal rst_branch : std_logic;
+signal rst_memory : std_logic;
 
 -- Branch output signals
 signal branch_enable_b : std_logic := '0';
@@ -73,9 +74,6 @@ signal mem_mode_d : std_logic_vector(1 downto 0);
 signal output_en_d : std_logic;
 signal input_en_d : std_logic;
 signal input_d : std_logic_vector(15 downto 0);
-signal raw_detected : std_logic;
-signal desired_write_idx : std_logic_vector(2 downto 0);
-signal counter_start_en : std_logic;
 signal raw_pos_1 : std_logic_vector(1 downto 0);
 signal raw_pos_2 : std_logic_vector(1 downto 0);
 
@@ -123,7 +121,7 @@ begin
 	Decode : entity work.decode port map(rst_decode, clk, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
 		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
 		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d,
-		desired_write_idx, desired_write_idx, counter_start_en, counter_start_en, raw_pos_1, raw_pos_2);
+		raw_pos_1, raw_pos_2);
 		
 	-- Setup the branch stage
 	Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
@@ -133,13 +131,13 @@ begin
 	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, z, n, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
-		input_d, input_e, raw_pos_1, raw_pos_2);
+		input_d, input_e, raw_pos_1, raw_pos_2, writeback_future, wr_data);
 		
 	-- Setup the memory stage
-	Memory : entity work.memory port map(rst, clk, mem_mode_e, reg1_val, reg2_val, src_reg, mem_read_data, 
+	Memory : entity work.memory port map(rst_memory, clk, mem_mode_e, raw_detected, reg1_val, reg2_val, src_reg, mem_read_data, 
 		wrback_en_b, wrback_en_m, subroutine_ret_b, subroutine_ret_m, alu_result_e, alu_result_m, wrback_mode_e, 
 		wrback_mode_m, imm_mode_e, imm_mode_m, ra_idx_e, ra_idx_m, output_en_e, output_en_m, 
-		input_en_d, input_en_m, input_e, input_m);
+		input_en_e, input_en_m, input_e, input_m, writeback_future);
 		
 	-- Setup the writeback stage
 	Writeback : entity work.writeback port map(rst, clk, wrback_mode_m, ra_idx_m, alu_result_m, 
@@ -150,10 +148,8 @@ begin
 	-- Insert bubble in execute when RAW hazard is detected
 	rst_decode <= '1' when branch_enable_b = '1' else rst;
 	rst_branch <= '1' when branch_enable_b = '1' else rst;
-	rst_execute <= 
-		'1' when branch_enable_b = '1' else 
-		'1' when raw_detected = '1' else
-		rst;
+	rst_execute <= '1' when branch_enable_b = '1' else rst;
+	rst_memory <= '1' when raw_detected = '1' else rst;
 	
 	-- Freeze the fetch clock when RAW hazard is detected
 	clk_fetch <= 

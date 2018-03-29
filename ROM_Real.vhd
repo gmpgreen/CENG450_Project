@@ -31,8 +31,10 @@ use IEEE.STD_LOGIC_ARITH.all;
 --use UNISIM.VComponents.all;
 
 entity ROM is
-    Port ( addr : in  STD_LOGIC_VECTOR (15 downto 0);
-           data : out  STD_LOGIC_VECTOR (15 downto 0));
+    Port ( 
+			clk  : in std_logic;
+			addr : in  STD_LOGIC_VECTOR (15 downto 0);
+         data : out  STD_LOGIC_VECTOR (15 downto 0));
 end ROM;
 
 architecture Behavioral of ROM is
@@ -62,6 +64,7 @@ architecture Behavioral of ROM is
 	
 	-- Next byte
 	signal odd_byte : std_logic_vector(15 downto 0);
+	signal even_byte : std_logic_vector(15 downto 0);
 
 	-- ROM Data
 	type ROM_TYPE is array (0 to 255) of std_logic_vector (7 downto 0);
@@ -79,8 +82,8 @@ architecture Behavioral of ROM is
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
+		add_op & "1", "10100100",
+		add_op & "1", "00110110",
 		nop_op & "0", "00000000",
 		out_op & "0", "00000000",
 		out_op & "0", "01000000",
@@ -196,10 +199,14 @@ architecture Behavioral of ROM is
 		nop_op & "0", "00000000",
 		"00000000", "00000000");
 begin
-
-	odd_byte_adder : entity work.adder_16bit port map(addr, x"0001", odd_byte);
-	--odd_byte <= addr(15 downto 1) & '1';
-	data <= rom_content(conv_integer(unsigned(addr))) & rom_content(conv_integer(unsigned(odd_byte)));
-	 
+	
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			odd_byte <= addr(15 downto 1) & '1';
+			even_byte <= addr(15 downto 1) & '0';
+			data <= rom_content(conv_integer(unsigned(even_byte))) & rom_content(conv_integer(unsigned(odd_byte)));
+		end if;
+	end process;
 end Behavioral;
 

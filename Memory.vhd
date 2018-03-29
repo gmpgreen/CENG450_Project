@@ -68,6 +68,12 @@ signal addr : std_logic_vector(15 downto 0);
 signal reg_dest : std_logic_vector(15 downto 0);
 signal reg_src : std_logic_vector(15 downto 0);
 signal write_data : std_logic_vector(15 downto 0);
+signal sub_ret : std_logic_vector(15 downto 0);
+signal input_inner : std_logic_vector(15 downto 0);
+signal alu_data : std_logic_vector(15 downto 0);
+signal wr_branch : std_logic;
+signal input_en : std_logic;
+signal wr_mode : std_logic_vector(1 downto 0);
 
 begin
 
@@ -75,6 +81,12 @@ begin
 	write_data <= reg_src;
 	
 	Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
+	
+	writeback_future <=
+		sub_ret when wr_branch = '1' else
+		input_inner when input_en = '1' else
+		alu_data when wr_mode /= "00" else
+		x"0000";
 
 	process(clk)
 	begin
@@ -96,6 +108,12 @@ begin
 				output_en_out <= '0';
 				input_en_out <= '0';
 				input_out <= x"0000";
+				sub_ret <= x"0000";
+				input_inner <= x"0000";
+				alu_data <= x"0000";
+				wr_branch <= '0';
+				input_en <= '0';
+				wr_mode <= "00";
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
@@ -112,6 +130,12 @@ begin
 				output_en_out <= output_en_in;
 				input_en_out <= input_en_in;
 				input_out <= input_in;
+				sub_ret <= Subr_Ret_In;
+				input_inner <= input_in;
+				alu_data <= ALU_Result_In;
+				wr_branch <= Wr_Back_Branch_In;
+				input_en <= input_en_in;
+				wr_mode <= Wr_Back_Mode_In;
 			end if;
 		end if;
 	end process;
