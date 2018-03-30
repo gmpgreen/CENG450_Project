@@ -36,8 +36,6 @@ entity Execute is
            input1 : in  STD_LOGIC_VECTOR (15 downto 0);
            input2 : in  STD_LOGIC_VECTOR (15 downto 0);
 			  shift : in std_logic_vector(3 downto 0);
-           Z : out  STD_LOGIC;
-           N : out  STD_LOGIC;
            ALU_Result : out  STD_LOGIC_VECTOR(15 downto 0);
 			  ra_idx_in : in std_logic_vector(2 downto 0);
 			  ra_idx_out : out std_logic_vector(2 downto 0);
@@ -62,11 +60,51 @@ entity Execute is
 			  writeback_memory : in std_logic_vector(15 downto 0);
 			  writeback_writeback : in std_logic_vector(15 downto 0);
 			  writeback_execute : in std_logic_vector(15 downto 0);
-			  writeback_future : out std_logic_vector(15 downto 0));
+			  writeback_future : out std_logic_vector(15 downto 0);
+           branch_instr_address : in  STD_LOGIC_VECTOR (15 downto 0);
+			  reg_val : in std_logic_vector(15 downto 0);
+           next_instr_address : in  STD_LOGIC_VECTOR (15 downto 0);
+			  branch_mode_en : in std_logic;
+           branch_mode : in  STD_LOGIC_VECTOR (2 downto 0);
+           branch_offset : in  STD_LOGIC_VECTOR (15 downto 0);
+           branch_enable : out  STD_LOGIC;
+           branch_address : out  STD_LOGIC_VECTOR (15 downto 0);
+           writeback_enable : out  STD_LOGIC;
+           return_address : out  STD_LOGIC_VECTOR (15 downto 0));
 end Execute;
 
 architecture Behavioral of Execute is
 
+-- Branch Signals
+-- Branch modes
+constant brr : std_logic_vector(2 downto 0) := "000";
+constant brr_n : std_logic_vector(2 downto 0) := "001";
+constant brr_z : std_logic_vector(2 downto 0) := "010";
+constant br : std_logic_vector(2 downto 0) := "011";
+constant br_n : std_logic_vector(2 downto 0) := "100";
+constant br_z : std_logic_vector(2 downto 0) := "101";
+constant br_sub : std_logic_vector(2 downto 0) := "110";
+constant ret : std_logic_vector(2 downto 0) := "111";
+
+-- Latch signals
+signal br_instr_addr_intrn : std_logic_vector(15 downto 0);
+signal reg_val_intrn : std_logic_vector(15 downto 0);
+signal nxt_instr_addr_intrn : std_logic_vector(15 downto 0);
+signal branch_mode_en_intrn : std_logic;
+signal branch_mode_intrn : std_logic_vector(2 downto 0);
+signal branch_offset_intrn : std_logic_vector(15 downto 0);
+signal N_intrn : std_logic;
+signal Z_intrn : std_logic;
+
+-- Extra signals
+signal muxed_relative_addr : std_logic_vector(15 downto 0);
+signal first_adder_output : std_logic_vector(15 downto 0);
+signal second_adder_output : std_logic_vector(15 downto 0);
+signal branch_taken : std_logic;
+signal subroutine_mode : std_logic;
+signal branch_enable_intrn : std_logic;
+
+-- ALU and RAW signals
 signal alu_mode_buf : std_logic_vector(2 downto 0);
 signal in1 : std_logic_vector(15 downto 0);
 signal in2 : std_logic_vector(15 downto 0);
@@ -83,6 +121,8 @@ signal raw_pos_2 : std_logic_vector(1 downto 0);
 signal input_inner : std_logic_vector(15 downto 0);
 signal input_en : std_logic;
 signal wr_mode : std_logic_vector(1 downto 0);
+signal N : std_logic;
+signal Z : std_logic;
 
 begin
 
@@ -115,6 +155,39 @@ begin
 		in2;
 					 
 	output_en_out <= output_en;
+	
+	-- Branch section -- 
+	-- Decide if you can take the branch
+	branch_taken <=
+		Z when (branch_mode_intrn = brr_z) else
+		Z when (branch_mode_intrn = br_z) else
+		N when (branch_mode_intrn = brr_n) else
+		N when (branch_mode_intrn = br_n) else
+		'1';
+		
+	-- Set branch enable output bit
+	branch_enable <= branch_mode_en_intrn when (branch_taken = '1') else '0';
+	branch_enable_intrn <= branch_mode_en_intrn when (branch_taken = '1') else '0';
+	
+	-- Determine whether its a relative or absolute branch
+	with branch_mode_intrn select
+		muxed_relative_addr <=
+			br_instr_addr_intrn(15 downto 1) & '0' when brr | brr_n | brr_z,
+			reg_val_intrn(15 downto 1) & '0' when others;
+	
+	-- Calculate the branch address
+	first_adder : entity work.Adder_16bit port map(muxed_relative_addr, branch_offset_intrn, first_adder_output);
+	second_adder : entity work.Adder_16bit port map(first_adder_output, branch_offset_intrn, second_adder_output);
+	
+	-- Determine the branch address
+	branch_address <= reg_val_intrn when (branch_mode_intrn = ret) else second_adder_output;
+	
+	-- Return address
+	return_address <= nxt_instr_addr_intrn;
+	
+	-- Enable/Disable writeback
+	subroutine_mode <= '1' when (branch_mode_intrn = br_sub) else '0';
+	writeback_enable <= subroutine_mode when (branch_enable_intrn = '1') else '0';
 
 	process(clk)
 	begin
@@ -142,6 +215,12 @@ begin
 				input_inner <= x"0000";
 				input_en <= '0';
 				wr_mode <= "00";
+				br_instr_addr_intrn <= x"0000";
+				reg_val_intrn <= x"0000";
+				nxt_instr_addr_intrn <= x"0000";
+				branch_mode_en_intrn <= '0';
+				branch_mode_intrn <= "000";
+				branch_offset_intrn <= x"0000";
 			else
 				alu_mode_buf <= ALU_Mode;
 				in1 <= input1;
@@ -165,6 +244,12 @@ begin
 				input_inner <= input_in;
 				input_en <= input_en_in;
 				wr_mode <= Wr_Back_Mode_In;
+				br_instr_addr_intrn <= branch_instr_address;
+				reg_val_intrn <= reg_val;
+				nxt_instr_addr_intrn <= next_instr_address;
+				branch_mode_en_intrn <= branch_mode_en;
+				branch_mode_intrn <= branch_mode;
+				branch_offset_intrn <= branch_offset;
 			end if;
 		end if;
 	end process;

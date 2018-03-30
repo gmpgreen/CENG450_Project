@@ -126,14 +126,15 @@ begin
 		raw_pos_1, raw_pos_2);
 		
 	-- Setup the branch stage
-	Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
-		branch_offset_d, z, n, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);  
+	--Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
+		--branch_offset_d, z, n, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);  
 		
 	-- Setup the execute stage
-	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, z, n, alu_result_e,
+	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
-		input_d, input_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e);
+		input_d, input_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e, PC_d, rd_data1, 
+		PC_f, branch_enable_d, branch_mode_d, branch_offset_d, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);
 		
 	-- Setup the memory stage
 	Memory : entity work.memory port map(rst_memory, clk, mem_mode_e, raw_detected, reg1_val, reg2_val, src_reg, mem_read_data, 
@@ -149,7 +150,7 @@ begin
 	-- Reset the decode, execute and branch latches when a branch is taken
 	-- Insert bubble in execute when RAW hazard is detected
 	rst_decode <= '1' when branch_enable_b = '1' else rst;
-	rst_branch <= '1' when branch_enable_b = '1' else rst;
+	--rst_branch <= '1' when branch_enable_b = '1' else rst;
 	rst_execute <= '1' when branch_enable_b = '1' else rst;
 	rst_memory <= '1' when raw_detected = '1' else rst;
 	
