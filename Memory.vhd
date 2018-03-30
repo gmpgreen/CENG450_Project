@@ -56,7 +56,9 @@ entity Memory is
 			  input_en_out : out std_logic;
 			  input_in : in std_logic_vector(15 downto 0);
 			  input_out : out std_logic_vector(15 downto 0);
-			  writeback_future : out std_logic_vector(15 downto 0));
+			  writeback_future : out std_logic_vector(15 downto 0);
+			  load_imm_in : in std_logic_vector (7 downto 0);
+			  load_imm_out: out std_logic_vector (7 downto 0));
 end Memory;
 
 architecture Behavioral of Memory is
@@ -116,6 +118,7 @@ begin
 				wr_branch <= '0';
 				input_en <= '0';
 				wr_mode <= "00";
+				load_imm_out <= x"00";
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
@@ -138,6 +141,7 @@ begin
 				wr_branch <= Wr_Back_Branch_In;
 				input_en <= input_en_in;
 				wr_mode <= Wr_Back_Mode_In;
+				load_imm_out <= load_imm_in;
 			end if;
 		end if;
 	end process;

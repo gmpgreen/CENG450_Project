@@ -107,6 +107,7 @@ signal input_en_m : std_logic;
 signal input_m : std_logic_vector(15 downto 0);
 signal writeback_m : std_logic_vector(15 downto 0);
 signal raw_detected : std_logic;
+signal ld_imm_m : std_logic_vector (7 downto 0);
 
 -- Writeback output signals
 signal wr_idx : std_logic_vector(2 downto 0);
@@ -138,12 +139,12 @@ begin
 	Memory : entity work.memory port map(rst_memory, clk, mem_mode_e, raw_detected, reg1_val, reg2_val, src_reg, mem_read_data, 
 		wrback_en_b, wrback_en_m, subroutine_ret_b, subroutine_ret_m, alu_result_e, alu_result_m, wrback_mode_e, 
 		wrback_mode_m, imm_mode_e, imm_mode_m, ra_idx_e, ra_idx_m, output_en_e, output_en_m, 
-		input_en_e, input_en_m, input_e, input_m, writeback_m);
+		input_en_e, input_en_m, input_e, input_m, writeback_m, ld_imm_e, ld_imm_m);
 		
 	-- Setup the writeback stage
 	Writeback : entity work.writeback port map(rst, clk, wrback_mode_m, ra_idx_m, alu_result_m, 
 		mem_read_data, wrback_en_m, subroutine_ret_m, src_reg, wr_en, wr_idx, wr_data, output_en_m, 
-		output, input_en_m, input_m); 
+		output, input_en_m, input_m, ld_imm_m, imm_mode_m); 
 		
 	-- Reset the decode, execute and branch latches when a branch is taken
 	-- Insert bubble in execute when RAW hazard is detected

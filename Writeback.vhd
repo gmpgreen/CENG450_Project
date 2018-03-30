@@ -45,7 +45,9 @@ entity Writeback is
 			  output_en : in std_logic;
 			  output : out std_logic_vector(15 downto 0);
 			  input_en : in std_logic;
-			  input : in std_logic_vector(15 downto 0));
+			  input : in std_logic_vector(15 downto 0);
+			  load_imm : in std_logic_vector(7 downto 0);
+			  immediate_mode : in std_logic);
 end Writeback;
 
 architecture Behavioral of Writeback is
@@ -60,9 +62,16 @@ signal mem_read : std_logic_vector(15 downto 0);
 signal output_inner : std_logic_vector(15 downto 0);
 signal input_inner : std_logic_vector(15 downto 0);
 signal input_inner_en : std_logic;
+signal load_imm_inner : std_logic_vector(7 downto 0);
+signal immediate_mode_inner : std_logic;
+signal load_imm_result : std_logic_vector(15 downto 0);
 
 begin
-
+	
+	load_imm_result <= Source_Reg(15 downto 8) & 
+							 load_imm_inner when immediate_mode_inner = '1' else
+							 load_imm_inner & Source_Reg(7 downto 0);
+	
 	Write_Enable <=
 		'1' when wr_branch = '1' else
 		'1' when input_inner_en = '1' else
@@ -76,7 +85,8 @@ begin
 	Write_Data_Out <=
 		sub_ret when wr_branch = '1' else
 		input_inner when input_inner_en = '1' else
-		alu_data when wr_mode /= "00" else
+		alu_data when wr_mode = "01" else
+		load_imm_result when wr_mode = "11" else
 		x"0000";
 		
 	-- Configure the output
@@ -96,6 +106,7 @@ begin
 				reg_src <= x"0000";
 				input_inner <= x"0000";
 				input_inner_en <= '0';
+				load_imm_inner <= x"00";
 			else
 				wr_mode <= Write_Mode;
 				wr_branch <= Wr_Back_Branch_En;
@@ -106,6 +117,8 @@ begin
 				reg_src <= Source_Reg;
 				input_inner <= input;
 				input_inner_en <= input_en;
+				load_imm_inner <= load_imm;
+				immediate_mode_inner <= immediate_mode;
 			end if;
 		end if;
 	end process;

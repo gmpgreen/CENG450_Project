@@ -110,7 +110,10 @@ begin
 
 --signal assignments--
 c1 <= instruction_intrn(3 downto 0); --shift
-ra_index <= "111" when instruction_intrn(15 downto 9) = br_sub else instruction_intrn(8 downto 6);
+ra_index <= "111" when instruction_intrn(15 downto 9) = br_sub else
+				"111" when instruction_intrn(15 downto 9) = load_imm else
+				instruction_intrn(8 downto 6);
+							  
 		
 -- Check if we're reading from rd_idx1
 with instruction_intrn(15 downto 9) select
@@ -138,21 +141,27 @@ ALU_Mode <=
 	"000";
 -- Select Writeback Mode
 with instruction_intrn(15 downto 9) select
-	Writeback_Mode <= "00" when test_op | out_op | brr | brr_neg | brr_zero | br | br_neg | 
+	Writeback_Mode <= 
+	"00" when test_op | out_op | brr | brr_neg | brr_zero | br | br_neg | 
 		br_zero | rtn | nop_op,
+	"10" when load | mov,
+	"11" when load_imm,
 	"01" when others;
---select shift operation
+--select load_immediate value
 with instruction_intrn(15 downto 9) select
-	Immediate <= "00000001" when shl_op | shr_op,
+	Immediate <= instruction_intrn(7 downto 0) when load_imm,
 	"00000000" when others;
---select read index 1 for regfile	
+--select read index 1 & 2 for regfile	
 with instruction_intrn(15 downto 9) select
 	rd_index1 <= 	instruction_intrn(5 downto 3) when add_op | sub_op | mul_op | nand_op,
 						instruction_intrn(8 downto 6) when shl_op | shr_op | test_op | 
-						br | br_neg | br_zero | br_sub | out_op,
+						br | br_neg | br_zero | br_sub | out_op | load | store | mov,
 						"111" when rtn,
 						"000" when others;	
-rd_index2 <= instruction_intrn(2 downto 0);
+with instruction_intrn(15 downto 9) select	
+	rd_index2 <= 	instruction_intrn(5 downto 3) when load | store | mov,
+						"111" when load_imm,
+						instruction_intrn(2 downto 0) when others;
 --branch offset selection		
 typ1_extn <= "1111111" & instruction_intrn(8 downto 0) when instruction_intrn(8) = '1' else
 				 "0000000" & instruction_intrn(8 downto 0);
@@ -163,7 +172,7 @@ typ2_extn <= "1111111111" & instruction_intrn(5 downto 0) when instruction_intrn
 with instruction_intrn(15 downto 9) select
 	branch_offset(15 downto 0) <= typ1_extn when brr | brr_neg | brr_zero,
 										   typ2_extn when others;
---load/store instruction selection
+--load/store/mem mode selection
 with instruction_intrn (15 downto 9) select
 	immediate_mode <= instruction_intrn(8) when load_imm,
 	'0' when others;
@@ -198,6 +207,8 @@ reg_file : entity work.register_file port map(rst, clk, rd_index1,
 				-- Set up signals for the counters
 				case instruction(15 downto 9) is
 					when br_sub	=> 
+						raw_start_tracking(7) <= "11";
+					when load_imm	=> 
 						raw_start_tracking(7) <= "11";
 					when add_op =>
 						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";

@@ -85,7 +85,7 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
 		rst <= '1';
-      wait for 100 ns;
+      wait for 50 ns;
 		rst <= '0';
 		
 		-- Initialize the register file
