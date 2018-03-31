@@ -80,7 +80,7 @@ begin
 	Write_Index_Out <= 
 		"111" when wr_branch = '1' else
 		wr_index when wr_mode = "001" else
-		wr_index when input_en = '1' else
+		wr_index when input_inner_en = '1' else
 		"000";
 	Write_Data_Out <=
 		sub_ret when wr_branch = '1' else
