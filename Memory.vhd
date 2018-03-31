@@ -92,6 +92,7 @@ begin
 		sub_ret when wr_branch = '1' else
 		input_inner when input_en = '1' else
 		alu_data when wr_mode = "001" else
+		reg_src when wr_mode = "100" else
 		x"0000";
 
 	process(clk)
