@@ -44,8 +44,8 @@ entity Memory is
            Subr_Ret_Out : out  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_In : in  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Result_Out : out  STD_LOGIC_VECTOR (15 downto 0);
-           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
-           Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (2 downto 0);
+           Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (2 downto 0);
 			  Immediate_Mode_In : in std_logic;
 			  Immediate_Mode_Out : out std_logic;
 			  ra_idx_in : in std_logic_vector(2 downto 0);
@@ -58,7 +58,8 @@ entity Memory is
 			  input_out : out std_logic_vector(15 downto 0);
 			  writeback_future : out std_logic_vector(15 downto 0);
 			  load_imm_in : in std_logic_vector (7 downto 0);
-			  load_imm_out: out std_logic_vector (7 downto 0));
+			  load_imm_out: out std_logic_vector (7 downto 0)
+			  );
 end Memory;
 
 architecture Behavioral of Memory is
@@ -75,7 +76,7 @@ signal input_inner : std_logic_vector(15 downto 0);
 signal alu_data : std_logic_vector(15 downto 0);
 signal wr_branch : std_logic;
 signal input_en : std_logic;
-signal wr_mode : std_logic_vector(1 downto 0);
+signal wr_mode : std_logic_vector(2 downto 0);
 
 begin
 	
@@ -90,7 +91,7 @@ begin
 	writeback_future <=
 		sub_ret when wr_branch = '1' else
 		input_inner when input_en = '1' else
-		alu_data when wr_mode /= "00" else
+		alu_data when wr_mode = "001" else
 		x"0000";
 
 	process(clk)
@@ -105,7 +106,7 @@ begin
 				Wr_Back_Branch_Out <= '0';
 				Subr_Ret_Out <= x"0000";
 				ALU_Result_Out <= x"0000";
-				Wr_Back_Mode_Out <= "00";
+				Wr_Back_Mode_Out <= "000";
 				Immediate_Mode_Out <= '0';
 				ra_idx_out <= "000";
 				Source_Reg_Out <= x"0000";
@@ -117,7 +118,7 @@ begin
 				alu_data <= x"0000";
 				wr_branch <= '0';
 				input_en <= '0';
-				wr_mode <= "00";
+				wr_mode <= "000";
 				load_imm_out <= x"00";
 			else
 				read_write <= Mem_Mode(1);

@@ -41,7 +41,7 @@ entity Decode is
            branch_mode : out  STD_LOGIC_VECTOR (2 downto 0);
            branch_offset : out  STD_LOGIC_VECTOR (15 downto 0);
            ALU_Mode : out  STD_LOGIC_VECTOR (2 downto 0);
-           Writeback_Mode : out  STD_LOGIC_VECTOR (1 downto 0);
+           Writeback_Mode : out  STD_LOGIC_VECTOR (2 downto 0);
            Immediate : out  STD_LOGIC_VECTOR (7 downto 0);
 			  rd_data1 : out std_logic_vector(15 downto 0); 
 			  rd_data2 : out std_logic_vector(15 downto 0);
@@ -142,11 +142,12 @@ ALU_Mode <=
 -- Select Writeback Mode
 with instruction_intrn(15 downto 9) select
 	Writeback_Mode <= 
-	"00" when test_op | out_op | brr | brr_neg | brr_zero | br | br_neg | 
-		br_zero | rtn | nop_op,
-	"10" when load | mov,
-	"11" when load_imm,
-	"01" when others;
+	"000" when test_op | out_op | brr | brr_neg | brr_zero | br | br_neg | 
+		br_zero | rtn | nop_op | store,
+	"100" when mov,
+	"011" when load_imm,
+	"010" when load,
+	"001" when others;
 --select load_immediate value
 with instruction_intrn(15 downto 9) select
 	Immediate <= instruction_intrn(7 downto 0) when load_imm,
@@ -225,8 +226,6 @@ reg_file : entity work.register_file port map(rst, clk, rd_index1,
 					when in_op =>
 						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when load =>
-						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
-					when load_imm =>
 						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";
 					when mov =>
 						raw_start_tracking(to_integer(unsigned(instruction(8 downto 6)))) <= "11";

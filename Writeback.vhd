@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Writeback is
     Port ( rst : in  STD_LOGIC;
            clk : in  STD_LOGIC;
-			  Write_Mode : in  STD_LOGIC_VECTOR (1 downto 0);
+			  Write_Mode : in  STD_LOGIC_VECTOR (2 downto 0);
            Write_Index_In : in  STD_LOGIC_VECTOR (2 downto 0);
            ALU_Result : in  STD_LOGIC_VECTOR (15 downto 0);
 			  Memory_Read : in std_logic_vector(15 downto 0);
@@ -52,7 +52,7 @@ end Writeback;
 
 architecture Behavioral of Writeback is
 
-signal wr_mode : std_logic_vector(1 downto 0);
+signal wr_mode : std_logic_vector(2 downto 0);
 signal wr_branch : std_logic;
 signal wr_index : std_logic_vector(2 downto 0);
 signal alu_data : std_logic_vector(15 downto 0);
@@ -75,18 +75,18 @@ begin
 	Write_Enable <=
 		'1' when wr_branch = '1' else
 		'1' when input_inner_en = '1' else
-		'0' when wr_mode = "00" else 
+		'0' when wr_mode = "000" else 
 		'1';
 	Write_Index_Out <= 
 		"111" when wr_branch = '1' else
-		wr_index when wr_mode /= "00" else
+		wr_index when wr_mode = "001" else
 		wr_index when input_en = '1' else
 		"000";
 	Write_Data_Out <=
 		sub_ret when wr_branch = '1' else
 		input_inner when input_inner_en = '1' else
-		alu_data when wr_mode = "01" else
-		load_imm_result when wr_mode = "11" else
+		alu_data when wr_mode = "001" else
+		load_imm_result when wr_mode = "011" else
 		x"0000";
 		
 	-- Configure the output
@@ -97,7 +97,7 @@ begin
 	begin
 		if rising_edge(clk) then
 			if (rst = '1') then
-				wr_mode <= "00";
+				wr_mode <= "000";
 				wr_branch <= '0';
 				wr_index <= "000";
 				alu_data <= x"0000";
