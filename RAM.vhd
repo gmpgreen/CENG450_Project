@@ -19,10 +19,11 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
-use IEEE.NUMERIC_STD.ALL;
+--use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
@@ -51,9 +52,9 @@ begin
 	begin
 		if rising_edge(clk) then
 			if (RW_Enable = '1') then
-				RAM_memory(to_integer(unsigned('0' & Address(15 downto 1)))) <= WR_Data;
+				RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1)))) <= WR_Data;
 			else
-				RD_Data <= RAM_memory(to_integer(unsigned('0' & Address(15 downto 1))));
+				RD_Data <= RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1))));
 			end if;
 		end if;
 	end process;

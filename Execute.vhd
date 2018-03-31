@@ -43,8 +43,8 @@ entity Execute is
            Mem_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
 			  Imediate_Mode_In : std_logic;
 			  Immediate_Mode_Out : out std_logic;
-           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (1 downto 0);
-           Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (1 downto 0);
+           Wr_Back_Mode_In : in  STD_LOGIC_VECTOR (2 downto 0);
+           Wr_Back_Mode_Out : out  STD_LOGIC_VECTOR (2 downto 0);
            Load_Imm_In : in  STD_LOGIC_VECTOR (7 downto 0);
            Load_Imm_Out : out  STD_LOGIC_VECTOR (7 downto 0);
 			  reg1_val : out std_logic_vector(15 downto 0);
@@ -117,7 +117,7 @@ signal raw_pos_1 : std_logic_vector(1 downto 0);
 signal raw_pos_2 : std_logic_vector(1 downto 0);
 signal input_inner : std_logic_vector(15 downto 0);
 signal input_en : std_logic;
-signal wr_mode : std_logic_vector(1 downto 0);
+signal wr_mode : std_logic_vector(2 downto 0);
 signal N : std_logic;
 signal Z : std_logic;
 
@@ -132,7 +132,7 @@ begin
 	writeback_future <=
 		nxt_instr_addr_intrn when wr_branch_intrn = '1' else -- Subroutine return address
 		input_inner when input_en = '1' else
-		alu_result_buf when wr_mode /= "00" else
+		alu_result_buf when wr_mode = "001" else
 		x"0000";
 	
 	-- Choose input 1 for ALU, while avoiding RAW conditions
@@ -197,7 +197,7 @@ begin
 				in1 <= x"0000";
 				in2 <= x"0000";
 				c1 <= x"0000";
-				Wr_Back_Mode_Out <= "00";
+				Wr_Back_Mode_Out <= "000";
 				Mem_Mode_Out <= "00";
 				Load_Imm_Out <= x"00";
 				Immediate_Mode_Out <= '0';
@@ -212,8 +212,9 @@ begin
 				raw_pos_2 <= "00";
 				input_inner <= x"0000";
 				input_en <= '0';
-				wr_mode <= "00";
+				wr_mode <= "000";
 				-- Branch signals
+				wr_mode <= "000";
 				br_instr_addr_intrn <= x"0000";
 				nxt_instr_addr_intrn <= x"0000";
 				branch_mode_en_intrn <= '0';
