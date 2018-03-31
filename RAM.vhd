@@ -33,6 +33,7 @@ use IEEE.STD_LOGIC_ARITH.ALL;
 entity RAM is
     Port ( 
 			  clk : in STD_LOGIC;
+			  RAM_Enable : in STD_LOGIC;
 			  RW_Enable : in  STD_LOGIC;
            Address : in  STD_LOGIC_VECTOR (15 downto 0);
            WR_Data : in  STD_LOGIC_VECTOR (15 downto 0);
@@ -51,10 +52,12 @@ begin
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			if (RW_Enable = '1') then
-				RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1)))) <= WR_Data;
-			else
-				RD_Data <= RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1))));
+			if RAM_Enable = '1' then
+				if (RW_Enable = '1') then
+					RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1)))) <= WR_Data;
+				else
+					RD_Data <= RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1))));
+				end if;
 			end if;
 		end if;
 	end process;

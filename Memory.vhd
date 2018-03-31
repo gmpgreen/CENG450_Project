@@ -80,7 +80,7 @@ signal wr_mode : std_logic_vector(2 downto 0);
 
 begin
 	
-	RAM : entity work.RAM port map(clk, read_write, addr, write_data, 
+	RAM : entity work.RAM port map(clk, mem_en, read_write, addr, write_data, 
 	Read_Data); 
 	
 	addr <= reg_dest when (read_write = '1') else reg_src;
