@@ -93,9 +93,9 @@ BEGIN
 		wait for clk_period;
 		input <= x"0003"; -- R1
       wait for clk_period;
-		input <= x"0001"; -- R2
+		input <= x"ABCD"; -- R2
       wait for clk_period;
-		input <= x"0005"; -- R3
+		input <= x"0004"; -- R3 /will change to R4
       wait for clk_period;
 		input <= x"0022"; -- R4
       wait for clk_period;
@@ -103,7 +103,7 @@ BEGIN
       wait for clk_period;
 		input <= x"0005"; -- R6
       wait for clk_period;
-		input <= x"0000"; -- R7
+		input <= x"0006"; -- R7
 		wait for clk_period;
 		
       -- insert stimulus here 

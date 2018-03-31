@@ -179,7 +179,7 @@ with instruction_intrn (15 downto 9) select
 	'0' when others;
 with instruction_intrn(15 downto 9) select	
 	mem_mode <= "11" when store,
-					"10" when load,
+					"01" when load,
 					"00" when others;
 	
 -- Configure input/output

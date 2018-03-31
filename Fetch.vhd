@@ -55,7 +55,7 @@ begin
 	
 	-- Get instruction from ROM
 	--rom : entity work.rom port map(clk, instr_addr, instruction);
-	rom : entity work.ROM port map(clk, instr_addr, instruction);
+	rom : entity work.ROM_VHDL port map(clk, instr_addr, instruction);
 	
 	-- Prepare the incremented PC
 	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);
