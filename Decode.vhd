@@ -109,7 +109,7 @@ begin
 
 --signal assignments--
 c1 <= instruction_intrn(3 downto 0); --shift
-ra_index <= "111" when instruction_intrn(15 downto 9) = br_sub else
+ra_index_intrn <= "111" when instruction_intrn(15 downto 9) = br_sub else
 				"111" when instruction_intrn(15 downto 9) = load_imm else
 				instruction_intrn(8 downto 6);
 ra_index <= ra_index_intrn;
