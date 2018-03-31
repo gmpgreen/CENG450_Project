@@ -133,6 +133,7 @@ begin
 		nxt_instr_addr_intrn when wr_branch_intrn = '1' else -- Subroutine return address
 		input_inner when input_en = '1' else
 		alu_result_buf when wr_mode = "001" else
+		muxed_in2 when wr_mode = "100" else
 		x"0000";
 	
 	-- Choose input 1 for ALU, while avoiding RAW conditions
