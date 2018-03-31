@@ -78,6 +78,9 @@ signal wr_branch : std_logic;
 signal input_en : std_logic;
 signal wr_mode : std_logic_vector(2 downto 0);
 signal rd_data_inner : std_logic_vector (15 downto 0);
+signal load_imm : std_logic_vector(7 downto 0);
+signal load_imm_reg : std_logic_vector(15 downto 0);
+signal imm_mode : std_logic;
 
 begin
 	
@@ -89,12 +92,18 @@ begin
 	
 	Read_Data <= rd_data_inner;
 	
-	Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
+	--Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
+	Mem_RAW_Hazard <= '0';
+	
+	load_imm_reg <= 
+		reg_src(15 downto 8) & load_imm when imm_mode = '0' else
+		load_imm & reg_src(7 downto 0);
 	
 	writeback_future <=
 		sub_ret when wr_branch = '1' else
 		input_inner when input_en = '1' else
 		alu_data when wr_mode = "001" else
+		load_imm_reg when wr_mode = "011" else
 		reg_src when wr_mode = "100" else
 		x"0000";
 
@@ -124,6 +133,8 @@ begin
 				input_en <= '0';
 				wr_mode <= "000";
 				load_imm_out <= x"00";
+				load_imm <= x"00";
+				imm_mode <= '0';
 			else
 				read_write <= Mem_Mode(1);
 				mem_en <= Mem_Mode(0);
@@ -147,6 +158,8 @@ begin
 				input_en <= input_en_in;
 				wr_mode <= Wr_Back_Mode_In;
 				load_imm_out <= load_imm_in;
+				load_imm <= load_imm_in;
+				imm_mode <= Immediate_Mode_In;
 			end if;
 		end if;
 	end process;

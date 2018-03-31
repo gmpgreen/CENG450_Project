@@ -127,13 +127,13 @@ raw_handler : entity work.raw_handler port map(rst, clk, write_future, ra_index_
 with instruction_intrn(15 downto 9) select
 	rd_enable_1 <=
 		'1' when add_op | sub_op | mul_op | nand_op | shl_op | shr_op | test_op |
-			out_op | br | br_neg | br_zero | br_sub | rtn | load | store,
+			out_op | br | br_neg | br_zero | br_sub | rtn | store,
 		'0' when others;
 		
 -- Check if we're reading from rd_idx2
 with instruction_intrn(15 downto 9) select
 	rd_enable_2 <= 
-		'1' when add_op | sub_op | mul_op | nand_op | mov,
+		'1' when add_op | sub_op | mul_op | nand_op | mov | load_imm | load,
 		'0' when others;
 		
 -- Get the RAW countdown for the current read index

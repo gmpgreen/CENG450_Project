@@ -45,12 +45,15 @@ architecture Behavioral of RAM is
 	type RAM_type is array (0 to 1024) of std_logic_vector (15 downto 0);
 	
 	signal RAM_memory : RAM_type;
-
+	signal address_intrn : std_logic_vector(15 downto 0);
+	signal rw_enable_intrn : std_logic;
 begin
 
-	RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1)))) <= WR_Data when RW_Enable = '1';
-	RD_Data <= RAM_memory(conv_integer(unsigned('0' & Address(15 downto 1)))) when RW_Enable = '0';
-	
+	rw_enable_intrn <= RW_Enable when RAM_Enable = '1' else '0';
+	address_intrn <= Address when RAM_Enable = '1' else x"0000";
+
+	RAM_memory(conv_integer(unsigned('0' & address_intrn(15 downto 1)))) <= WR_Data when rw_enable_intrn = '1';
+	RD_Data <= RAM_memory(conv_integer(unsigned('0' & address_intrn(15 downto 1)))) when rw_enable_intrn = '0';
 	
 end Behavioral;
 

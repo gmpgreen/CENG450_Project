@@ -100,6 +100,9 @@ signal branch_taken : std_logic;
 signal subroutine_mode : std_logic;
 signal branch_enable_intrn : std_logic;
 signal wr_branch_intrn : std_logic;
+signal load_imm : std_logic_vector(7 downto 0);
+signal load_imm_reg : std_logic_vector(15 downto 0);
+signal imm_mode : std_logic;
 
 -- ALU and RAW signals
 signal alu_mode_buf : std_logic_vector(2 downto 0);
@@ -128,11 +131,16 @@ begin
 	-- Used for both result and output
 	ALU_Result <= alu_result_buf when output_en = '0' else in1;
 	
+	load_imm_reg <= 
+		muxed_in2(15 downto 8) & load_imm when imm_mode = '0' else
+		load_imm & muxed_in2(7 downto 0);
+	
 	-- Find the future writeback
 	writeback_future <=
 		nxt_instr_addr_intrn when wr_branch_intrn = '1' else -- Subroutine return address
 		input_inner when input_en = '1' else
 		alu_result_buf when wr_mode = "001" else
+		load_imm_reg when wr_mode = "011" else
 		muxed_in2 when wr_mode = "100" else
 		x"0000";
 	
@@ -200,8 +208,10 @@ begin
 				c1 <= x"0000";
 				Wr_Back_Mode_Out <= "000";
 				Mem_Mode_Out <= "00";
+				load_imm <= x"00";
 				Load_Imm_Out <= x"00";
 				Immediate_Mode_Out <= '0';
+				imm_mode <= '0';
 				ra_idx_out <= "000";
 				output_en <= '0';
 				input_en_out <= '0';
@@ -228,8 +238,10 @@ begin
 				c1 <= x"000" & shift;
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
 				Mem_Mode_Out <= Mem_Mode_In;
+				load_imm <= Load_Imm_In;
 				Load_Imm_Out <= Load_Imm_In;
 				Immediate_Mode_Out <= Imediate_Mode_In;
+				imm_mode <= Imediate_Mode_In;
 				ra_idx_out <= ra_idx_in;
 				output_en <= output_en_in;
 				input_en_out <= input_en_in;

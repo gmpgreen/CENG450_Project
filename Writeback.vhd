@@ -68,9 +68,9 @@ signal load_imm_result : std_logic_vector(15 downto 0);
 
 begin
 	
-	load_imm_result <= Source_Reg(15 downto 8) & 
-							 load_imm_inner when immediate_mode_inner = '1' else
-							 load_imm_inner & Source_Reg(7 downto 0);
+	load_imm_result <= 
+		Source_Reg(15 downto 8) & load_imm_inner when immediate_mode_inner = '0' else
+		load_imm_inner & Source_Reg(7 downto 0);
 	
 	Write_Enable <=
 		'1' when wr_branch = '1' else
@@ -81,6 +81,7 @@ begin
 		"111" when wr_branch = '1' else
 		wr_index when wr_mode = "001" else
 		wr_index when wr_mode = "010" else
+		wr_index when wr_mode = "011" else
 		wr_index when wr_mode = "100" else
 		wr_index when input_inner_en = '1' else
 		"000";
