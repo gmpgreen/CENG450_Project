@@ -80,6 +80,7 @@ begin
 	Write_Index_Out <= 
 		"111" when wr_branch = '1' else
 		wr_index when wr_mode = "001" else
+		wr_index when wr_mode = "010" else
 		wr_index when input_inner_en = '1' else
 		"000";
 	Write_Data_Out <=
@@ -87,6 +88,7 @@ begin
 		input_inner when input_inner_en = '1' else
 		alu_data when wr_mode = "001" else
 		load_imm_result when wr_mode = "011" else
+		mem_read when wr_mode = "010" else
 		x"0000";
 		
 	-- Configure the output

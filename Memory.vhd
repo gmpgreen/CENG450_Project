@@ -77,14 +77,17 @@ signal alu_data : std_logic_vector(15 downto 0);
 signal wr_branch : std_logic;
 signal input_en : std_logic;
 signal wr_mode : std_logic_vector(2 downto 0);
+signal rd_data_inner : std_logic_vector (15 downto 0);
 
 begin
 	
 	RAM : entity work.RAM port map(clk, mem_en, read_write, addr, write_data, 
-	Read_Data); 
+	rd_data_inner);
 	
 	addr <= reg_dest when (read_write = '1') else reg_src;
 	write_data <= reg_src;
+	
+	Read_Data <= rd_data_inner;
 	
 	Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
 	
