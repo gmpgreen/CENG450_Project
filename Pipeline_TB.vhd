@@ -85,7 +85,7 @@ BEGIN
    begin		
       -- hold reset state for 100 ns.
 		rst <= '1';
-      wait for 50 ns;
+      wait for 100 ns;
 		rst <= '0';
 		
 		-- Initialize the register file
@@ -97,7 +97,7 @@ BEGIN
       wait for clk_period;
 		input <= x"0004"; -- R3 /will change to R4
       wait for clk_period;
-		input <= x"0022"; -- R4
+		input <= x"0012"; -- R4
       wait for clk_period;
 		input <= x"0001"; -- R5
       wait for clk_period;

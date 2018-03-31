@@ -33,6 +33,7 @@ entity Fetch is
     Port ( rst : in STD_LOGIC;
 			  clk : in STD_LOGIC;
 			  branch_enable : in  STD_LOGIC;
+			  branch_enable_out : out std_logic;
            branch_address : in  STD_LOGIC_VECTOR (15 downto 0);
            instruction : out  STD_LOGIC_VECTOR (15 downto 0);
            instruction_addr : out  STD_LOGIC_VECTOR (15 downto 0);
@@ -46,12 +47,16 @@ architecture Behavioral of Fetch is
 	signal br_addr : std_logic_vector(15 downto 0);
 	signal PC_incr : std_logic_vector(15 downto 0);
 	signal PC : std_logic_vector(15 downto 0);
+	signal PC_to_read : std_logic_vector(15 downto 0);
 	signal instr_addr : std_logic_vector(15 downto 0);
 
 begin
 
 	-- Chose between PC and branch address for current instruction
 	Instr_Addr_Selector : entity work.mux2_16 port map(PC, br_addr, br_en, instr_addr);
+	
+	-- Say we're not done here yet
+	branch_enable_out <= br_en;
 	
 	-- Get instruction from ROM
 	--rom : entity work.rom port map(clk, instr_addr, instruction);
@@ -61,7 +66,7 @@ begin
 	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);
 	
 	-- Update output address
-	instruction_addr <= instr_addr;
+	instruction_addr <= PC_to_read;
 	
 	process(clk)
 	begin
@@ -69,11 +74,13 @@ begin
 			if (rst = '1') then
 				br_en <= '0';
 				br_addr <= x"0000";
+				PC_to_read <= x"0000";
 				PC <= x"0000";
 				input_out <= x"0000";
 			else
 				br_en <= branch_enable;
 				br_addr <= branch_address;
+				PC_to_read <= instr_addr;
 				PC <= PC_incr;
 				input_out <= input_in;
 			end if;

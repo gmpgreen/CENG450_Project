@@ -56,6 +56,7 @@ signal subroutine_ret_b : std_logic_vector(15 downto 0) := x"0000";
 signal instruction : std_logic_vector(15 downto 0);
 signal PC_f : std_logic_vector(15 downto 0);
 signal input_f : std_logic_vector(15 downto 0);
+signal branch_enable_f : std_logic;
 
 -- Decode ouput signals
 signal ra_idx_d : std_logic_vector(2 downto 0);
@@ -116,11 +117,11 @@ signal wr_en : std_logic;
 
 begin
 	-- Setup the fetch stage
-	Fetch : entity work.fetch port map(rst, clk_fetch, branch_enable_b, branch_addr_b, instruction, PC_f, 
-		input, input_f);
+	Fetch : entity work.fetch port map(rst, clk_fetch, branch_enable_b, branch_enable_f, branch_addr_b, 
+		instruction, PC_f, input, input_f);
 	
 	-- Setup the decode stage
-	Decode : entity work.decode port map(rst_decode, clk, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
+	Decode : entity work.decode port map(rst_decode, clk, rst, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
 		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
 		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d,
 		raw_pos_1, raw_pos_2);
@@ -133,7 +134,7 @@ begin
 	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
-		input_d, input_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e, PC_d, rd_data1, 
+		input_d, input_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e, PC_d, 
 		PC_f, branch_enable_d, branch_mode_d, branch_offset_d, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);
 		
 	-- Setup the memory stage
@@ -149,16 +150,34 @@ begin
 		
 	-- Reset the decode, execute and branch latches when a branch is taken
 	-- Insert bubble in execute when RAW hazard is detected
-	rst_decode <= '1' when branch_enable_b = '1' else rst;
-	--rst_branch <= '1' when branch_enable_b = '1' else rst;
-	rst_execute <= '1' when branch_enable_b = '1' else rst;
-	rst_memory <= '1' when raw_detected = '1' else rst;
+	rst_decode <= 
+		'1' when branch_enable_b = '1' else 
+		'1' when branch_enable_f = '1' else 
+		rst;
+	rst_execute <= 
+		'1' when branch_enable_b = '1' else 
+		'1' when branch_enable_f = '1' else 
+		rst;
+	rst_memory <= 
+		--'1' when branch_enable_b = '1' else 
+		--'1' when branch_enable_f = '1' else 
+		'1' when raw_detected = '1' else 
+		rst;
 	
 	-- Freeze the fetch clock when RAW hazard is detected
 	clk_fetch <= 
 		clk when branch_enable_b = '1' else
 		'0' when raw_detected = '1' else
 		clk;
+		
+	process(clk)
+	begin
+		if(rising_edge(clk)) then
+			if(rst = '1') then
+				output <= x"0000";
+			end if;
+		end if;
+	end process;
 
 end Behavioral;
 
