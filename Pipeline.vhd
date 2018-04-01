@@ -37,8 +37,11 @@ entity Pipeline is
 end Pipeline;
 
 architecture Behavioral of Pipeline is
--- Clock signals
-signal clk_fetch : std_logic;
+
+-- Freeze signals
+signal frz_fetch : std_logic;
+signal frz_decode : std_logic;
+signal frz_execute : std_logic;
 
 -- Reset signals
 signal rst_decode : std_logic;
@@ -93,6 +96,7 @@ signal output_en_e : std_logic;
 signal input_en_e : std_logic;
 signal input_e : std_logic_vector(15 downto 0);
 signal writeback_e : std_logic_vector(15 downto 0);
+signal raw_hazard_e : std_logic;
 
 -- Memory output signals
 signal mem_read_data : std_logic_vector(15 downto 0);
@@ -107,7 +111,7 @@ signal output_en_m : std_logic;
 signal input_en_m : std_logic;
 signal input_m : std_logic_vector(15 downto 0);
 signal writeback_m : std_logic_vector(15 downto 0);
-signal raw_detected : std_logic;
+signal raw_hazard_m : std_logic;
 signal ld_imm_m : std_logic_vector (7 downto 0);
 
 -- Writeback output signals
@@ -117,28 +121,24 @@ signal wr_en : std_logic;
 
 begin
 	-- Setup the fetch stage
-	Fetch : entity work.fetch port map(rst, clk_fetch, branch_enable_b, branch_enable_f, branch_addr_b, 
+	Fetch : entity work.fetch port map(rst, clk, frz_fetch, branch_enable_b, branch_enable_f, branch_addr_b, 
 		instruction, PC_f, input, input_f);
 	
 	-- Setup the decode stage
-	Decode : entity work.decode port map(rst_decode, clk, rst, instruction, ra_idx_d, PC_f, PC_d, branch_enable_d, 
-		branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, ld_imm_d, rd_data1, rd_data2, wr_idx, 
-		wr_data, wr_en, shift, imm_mode_d, mem_mode_d, output_en_d, input_en_d, input_f, input_d,
-		raw_pos_1, raw_pos_2);
-		
-	-- Setup the branch stage
-	--Branch : entity work.branch port map(rst_branch, clk, PC_d, rd_data1, PC_f, branch_enable_d, branch_mode_d,
-		--branch_offset_d, z, n, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);  
+	Decode : entity work.decode port map(rst_decode, clk, frz_decode, rst, instruction, ra_idx_d, 
+		PC_f, PC_d, branch_enable_d, branch_mode_d, branch_offset_d, alu_mode, wrback_mode_d, 
+		ld_imm_d, rd_data1, rd_data2, wr_idx, wr_data, wr_en, shift, imm_mode_d, mem_mode_d, 
+		output_en_d, input_en_d, input_f, input_d, raw_pos_1, raw_pos_2);
 		
 	-- Setup the execute stage
-	Execute : entity work.execute port map(rst_execute, clk, alu_mode, rd_data1, rd_data2, shift, alu_result_e,
+	Execute : entity work.execute port map(rst_execute, clk, frz_execute, alu_mode, rd_data1, rd_data2, shift, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
-		input_d, input_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e, PC_d, 
+		input_d, input_e, raw_hazard_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e, PC_d, 
 		PC_f, branch_enable_d, branch_mode_d, branch_offset_d, branch_enable_b, branch_addr_b, wrback_en_b, subroutine_ret_b);
 		
 	-- Setup the memory stage
-	Memory : entity work.memory port map(rst_memory, clk, mem_mode_e, raw_detected, reg1_val, reg2_val, src_reg, mem_read_data, 
+	Memory : entity work.memory port map(rst_memory, clk, mem_mode_e, raw_hazard_m, reg1_val, reg2_val, src_reg, mem_read_data, 
 		wrback_en_b, wrback_en_m, subroutine_ret_b, subroutine_ret_m, alu_result_e, alu_result_m, wrback_mode_e, 
 		wrback_mode_m, imm_mode_e, imm_mode_m, ra_idx_e, ra_idx_m, output_en_e, output_en_m, 
 		input_en_e, input_en_m, input_e, input_m, writeback_m, ld_imm_e, ld_imm_m);
@@ -159,16 +159,14 @@ begin
 		'1' when branch_enable_f = '1' else 
 		rst;
 	rst_memory <= 
-		--'1' when branch_enable_b = '1' else 
-		--'1' when branch_enable_f = '1' else 
-		'1' when raw_detected = '1' else 
+		raw_hazard_e when raw_hazard_m = '1' else 
 		rst;
 	
 	-- Freeze the fetch clock when RAW hazard is detected
-	clk_fetch <= 
-		clk when branch_enable_b = '1' else
-		'0' when raw_detected = '1' else
-		clk;
+	-- For detection: raw_hazard_e AND raw_hazard_m
+	frz_fetch <= raw_hazard_e when raw_hazard_m = '1' else '0';
+	frz_decode <= raw_hazard_e when raw_hazard_m = '1' else '0';
+	frz_execute <= raw_hazard_e when raw_hazard_m = '1' else '0';
 		
 	process(clk)
 	begin

@@ -33,6 +33,7 @@ entity Decode is
     Port ( 
 			  rst : in STD_LOGIC;
 			  clk : in STD_LOGIC;
+			  frz : in STD_LOGIC;
 			  rst_reg_file : in STD_LOGIC;
 			  instruction : in  STD_LOGIC_VECTOR (15 downto 0);
 			  ra_index : out std_logic_vector(2 downto 0);
@@ -210,7 +211,7 @@ reg_file : entity work.register_file port map(rst_reg_file, clk, rd_index1,
 				instruction_intrn <= x"0000";
 				pc_out <= x"0000";
 				input_out <= x"0000";
-			else
+			elsif (frz = '0') then
 				instruction_intrn <= instruction;
 				pc_out <= pc_in;
 				input_out <= input_in;

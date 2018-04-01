@@ -92,8 +92,7 @@ begin
 	
 	Read_Data <= rd_data_inner;
 	
-	--Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
-	Mem_RAW_Hazard <= '0';
+	Mem_RAW_Hazard <= '1' when mem_mode_intrn = "01" else '0';
 	
 	load_imm_reg <= 
 		reg_src(15 downto 8) & load_imm when imm_mode = '0' else
@@ -103,6 +102,7 @@ begin
 		sub_ret when wr_branch = '1' else
 		input_inner when input_en = '1' else
 		alu_data when wr_mode = "001" else
+		rd_data_inner when wr_mode = "010" else
 		load_imm_reg when wr_mode = "011" else
 		reg_src when wr_mode = "100" else
 		x"0000";

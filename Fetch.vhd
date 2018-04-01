@@ -32,6 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity Fetch is
     Port ( rst : in STD_LOGIC;
 			  clk : in STD_LOGIC;
+			  frz : in STD_LOGIC;
 			  branch_enable : in  STD_LOGIC;
 			  branch_enable_out : out std_logic;
            branch_address : in  STD_LOGIC_VECTOR (15 downto 0);
@@ -49,6 +50,7 @@ architecture Behavioral of Fetch is
 	signal PC : std_logic_vector(15 downto 0);
 	signal PC_to_read : std_logic_vector(15 downto 0);
 	signal instr_addr : std_logic_vector(15 downto 0);
+	signal clk_rom : std_logic;
 
 begin
 
@@ -60,7 +62,7 @@ begin
 	
 	-- Get instruction from ROM
 	--rom : entity work.rom port map(clk, instr_addr, instruction);
-	rom : entity work.ROM_VHDL port map(clk, instr_addr, instruction);
+	rom : entity work.ROM_VHDL port map(clk_rom, instr_addr, instruction);
 	
 	-- Prepare the incremented PC
 	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);
@@ -71,18 +73,29 @@ begin
 	process(clk)
 	begin
 		if rising_edge(clk) then
+			-- Manual Control of ROM Clock
+			if (frz = '0') then
+				clk_rom <= '1';
+			end if;
+			
+			-- Latch internal signals
 			if (rst = '1') then
 				br_en <= '0';
 				br_addr <= x"0000";
 				PC_to_read <= x"0000";
 				PC <= x"0000";
 				input_out <= x"0000";
-			else
+			elsif (frz = '0') then
 				br_en <= branch_enable;
 				br_addr <= branch_address;
 				PC_to_read <= instr_addr;
 				PC <= PC_incr;
 				input_out <= input_in;
+			end if;
+		elsif falling_edge(clk) then
+			-- Manual Control of ROM Clock
+			if (frz = '0') then
+				clk_rom <= '0';
 			end if;
 		end if;
 	end process;
