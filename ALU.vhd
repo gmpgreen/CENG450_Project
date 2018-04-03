@@ -59,14 +59,17 @@ signal n_result_cur : std_logic := '0';
 signal z_result_old : std_logic := '0';
 signal n_result_old : std_logic := '0';
 signal operation_results : result_array;
+signal multiply_internal : std_logic_vector(31 downto 0);
 --signal result_intermediate : std_logic_vector(15 downto 0); -- Added so that the result can be read for Z & N.
+
 
 begin
 
 	-- Concurrent operations
 	operation_results(1) <= std_logic_vector(signed(in1) + signed(in2));
-	operation_results(2) <= std_logic_vector(signed(in1) - signed(in2));
-	operation_results(3) <= std_logic_vector(signed(in1) * signed(in2));
+	operation_results(2) <= std_logic_vector(signed(in1) - signed(in2));	
+	multiply_internal <= std_logic_vector(signed(in1) * signed(in2));
+	operation_results(3) <= multiply_internal(15 downto 0);
 	operation_results(4) <= std_logic_vector(in1 nand in2);
 	shift_left : entity work.barrel_shift_left port map(in1, in2(3 downto 0), operation_results(5));
 	Barrel_Shift_Right : entity work.Barrel_Shift_Right port map(in1, in2(3 downto 0), operation_results(6));
