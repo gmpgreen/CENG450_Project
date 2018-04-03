@@ -61,30 +61,26 @@ architecture Behavioral of ROM is
 	constant br_zero : std_logic_vector(6 downto 0) := "1000101";
 	constant br_sub : std_logic_vector(6 downto 0) 	:= "1000110"; 
 	constant rtn	: std_logic_vector(6 downto 0)	:= "1000111";
-	
-	-- Next byte
-	signal odd_byte : std_logic_vector(15 downto 0);
-	signal even_byte : std_logic_vector(15 downto 0);
 
 	-- ROM Data
 	type ROM_TYPE is array (0 to 255) of std_logic_vector (7 downto 0);
 
 	constant rom_content : ROM_TYPE := (
 		in_op & "0", "00000000",
-		in_op & "0", "01000000",
-		in_op & "0", "10000000",
-		in_op & "0", "11000000",
-		in_op & "1", "00000000",
-		in_op & "1", "01000000",
-		in_op & "1", "10000000",
-		in_op & "1", "11000000",
 		out_op & "0", "00000000",
+		in_op & "0", "01000000",
 		out_op & "0", "01000000",
+		in_op & "0", "10000000",
 		out_op & "0", "10000000",
+		in_op & "0", "11000000",
 		out_op & "0", "11000000",
+		in_op & "1", "00000000",
 		out_op & "1", "00000000",
+		in_op & "1", "01000000",
 		out_op & "1", "01000000",
+		in_op & "1", "10000000",
 		out_op & "1", "10000000",
+		in_op & "1", "11000000",
 		out_op & "1", "11000000",
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
@@ -197,18 +193,17 @@ architecture Behavioral of ROM is
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
 		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
-		nop_op & "0", "00000000",
 		"00000000", "00000000");
 begin
 	
 	process(clk)
+	 variable odd_byte : integer := 0;
+	 variable even_byte : integer := 0;
 	begin
 		if rising_edge(clk) then
-			odd_byte <= addr(15 downto 1) & '1';
-			even_byte <= addr(15 downto 1) & '0';
-			data <= rom_content(conv_integer(unsigned(even_byte))) & rom_content(conv_integer(unsigned(odd_byte)));
+			odd_byte := conv_integer(unsigned(addr(15 downto 1) & '1'));
+			even_byte := conv_integer(unsigned(addr(15 downto 1) & '0'));
+			data <= rom_content(even_byte) & rom_content(odd_byte);
 		end if;
 	end process;
 end Behavioral;

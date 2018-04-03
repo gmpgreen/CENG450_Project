@@ -51,6 +51,7 @@ architecture Behavioral of Fetch is
 	signal PC_to_read : std_logic_vector(15 downto 0);
 	signal instr_addr : std_logic_vector(15 downto 0);
 	signal clk_rom : std_logic;
+	signal instruction_intrn : std_logic_vector(15 downto 0);
 
 begin
 
@@ -62,7 +63,8 @@ begin
 	
 	-- Get instruction from ROM
 	--rom : entity work.rom port map(clk, instr_addr, instruction);
-	rom : entity work.ROM_VHDL port map(clk_rom, instr_addr, instruction);
+	rom : entity work.ROM port map(clk_rom, instr_addr, instruction_intrn);
+	instruction <= instruction_intrn when rst = '0' else x"0000";
 	
 	-- Prepare the incremented PC
 	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);

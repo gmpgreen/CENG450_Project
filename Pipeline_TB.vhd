@@ -90,21 +90,21 @@ BEGIN
 		
 		-- Initialize the register file
 		input <= x"0002"; -- R0
-		wait for clk_period;
+		wait for clk_period*2;
 		input <= x"0003"; -- R1
-      wait for clk_period;
+      wait for clk_period*2;
 		input <= x"ABCD"; -- R2
-      wait for clk_period;
+      wait for clk_period*2;
 		input <= x"0004"; -- R3 /will change to R4
-      wait for clk_period;
+      wait for clk_period*2;
 		input <= x"0012"; -- R4
-      wait for clk_period;
+      wait for clk_period*2;
 		input <= x"0001"; -- R5
-      wait for clk_period;
+      wait for clk_period*2;
 		input <= x"0005"; -- R6
-      wait for clk_period;
+      wait for clk_period*2;
 		input <= x"0006"; -- R7
-		wait for clk_period;
+		wait for clk_period*2;
 		
       -- insert stimulus here 
 
