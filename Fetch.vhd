@@ -55,6 +55,9 @@ architecture Behavioral of Fetch is
 
 begin
 
+	br_addr <= branch_address when rst = '0' else x"0000";
+	br_en <= branch_enable when rst = '0' else '0';
+
 	-- Chose between PC and branch address for current instruction
 	Instr_Addr_Selector : entity work.mux2_16 port map(PC, br_addr, br_en, instr_addr);
 	
@@ -63,7 +66,7 @@ begin
 	
 	-- Get instruction from ROM
 	--rom : entity work.rom port map(clk, instr_addr, instruction);
-	rom : entity work.ROM port map(clk_rom, instr_addr, instruction_intrn);
+	rom : entity work.ROM_VHDL port map(clk_rom, instr_addr, instruction_intrn);
 	instruction <= instruction_intrn when rst = '0' else x"0000";
 	
 	-- Prepare the incremented PC
@@ -72,32 +75,24 @@ begin
 	-- Update output address
 	instruction_addr <= PC_to_read;
 	
+	clk_rom <= clk when frz = '0' else '0';
+	
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			-- Manual Control of ROM Clock
-			if (frz = '0') then
-				clk_rom <= '1';
-			end if;
-			
 			-- Latch internal signals
 			if (rst = '1') then
-				br_en <= '0';
-				br_addr <= x"0000";
+				--br_en <= '0';
+				--br_addr <= x"0000";
 				PC_to_read <= x"0000";
 				PC <= x"0000";
 				input_out <= x"0000";
 			elsif (frz = '0') then
-				br_en <= branch_enable;
-				br_addr <= branch_address;
+				--br_en <= branch_enable;
+				--br_addr <= branch_address;
 				PC_to_read <= instr_addr;
 				PC <= PC_incr;
 				input_out <= input_in;
-			end if;
-		elsif falling_edge(clk) then
-			-- Manual Control of ROM Clock
-			if (frz = '0') then
-				clk_rom <= '0';
 			end if;
 		end if;
 	end process;

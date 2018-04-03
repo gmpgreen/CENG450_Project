@@ -42,7 +42,7 @@ end RAM;
 
 architecture Behavioral of RAM is
 	
-	type RAM_type is array (0 to 1024) of std_logic_vector (15 downto 0);
+	type RAM_type is array (0 to 512) of std_logic_vector (15 downto 0);
 	
 	signal RAM_memory : RAM_type;
 	signal address_intrn : std_logic_vector(15 downto 0);
