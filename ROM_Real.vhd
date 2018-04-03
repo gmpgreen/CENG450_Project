@@ -70,12 +70,23 @@ architecture Behavioral of ROM is
 	type ROM_TYPE is array (0 to 255) of std_logic_vector (7 downto 0);
 
 	constant rom_content : ROM_TYPE := (
+		in_op & "0", "00000000",
+		in_op & "0", "01000000",
+		in_op & "0", "10000000",
+		in_op & "0", "11000000",
+		in_op & "1", "00000000",
+		in_op & "1", "01000000",
+		in_op & "1", "10000000",
+		in_op & "1", "11000000",
+		out_op & "0", "00000000",
+		out_op & "0", "01000000",
+		out_op & "0", "10000000",
+		out_op & "0", "11000000",
+		out_op & "1", "00000000",
+		out_op & "1", "01000000",
+		out_op & "1", "10000000",
+		out_op & "1", "11000000",
 		nop_op & "0", "00000000",
-		in_op  & "0", "00000000", -- R0 = 02
-		in_op  & "0", "01000000", -- R1 = 03
-		in_op  & "0", "10000000", -- R2 = 01
-		in_op  & "0", "11000000", -- R3 = 05
-		in_op  & "1", "00000000", -- R4 = x22
 		nop_op & "0", "00000000",
 		load   & "0", "11100000", --store, r.dest = r3, r.src = r4
 		nop_op & "0", "00000000",
@@ -92,14 +103,6 @@ architecture Behavioral of ROM is
 		add_op & "1", "10100100",
 		add_op & "1", "00110110",
 		nop_op & "0", "00000000",
-		out_op & "0", "00000000",
-		out_op & "0", "01000000",
-		out_op & "0", "10000000",
-		out_op & "0", "11000000",
-		out_op & "1", "00000000",
-		out_op & "1", "01000000",
-		out_op & "1", "10000000",
-		out_op & "1", "11000000",
 		br_sub & "1", "00000001", -- Store return address, go to subroutine
 		brr    & "1", "11111111", -- infinite loop (at program's end)
 		add_op & "0", "10001101", -- Start of subroutine. Runs 5 times, R2 <-- R1 + 1

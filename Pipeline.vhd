@@ -169,15 +169,6 @@ begin
 		clk when branch_enable_b = '1' else
 		'0' when raw_detected = '1' else
 		clk;
-		
-	process(clk)
-	begin
-		if(rising_edge(clk)) then
-			if(rst = '1') then
-				output <= x"0000";
-			end if;
-		end if;
-	end process;
 
 end Behavioral;
 

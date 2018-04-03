@@ -129,7 +129,7 @@ begin
 	ALU : entity work.alu port map(muxed_in1, muxed_in2, alu_mode_buf, clk, rst, alu_result_buf, Z, N);
 	
 	-- Used for both result and output
-	ALU_Result <= alu_result_buf when output_en = '0' else in1;
+	ALU_Result <= alu_result_buf when output_en = '0' else muxed_in1;
 	
 	load_imm_reg <= 
 		muxed_in2(15 downto 8) & load_imm when imm_mode = '0' else
