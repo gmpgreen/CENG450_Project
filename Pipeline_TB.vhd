@@ -58,7 +58,7 @@ ARCHITECTURE behavior OF Pipeline_TB IS
    signal output : std_logic_vector(15 downto 0);
 
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
+   constant clk_period : time := 10 us;
  
 BEGIN
  

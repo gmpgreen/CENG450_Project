@@ -58,6 +58,8 @@ signal z_result_cur : std_logic := '0';
 signal n_result_cur : std_logic := '0';
 signal z_result_old : std_logic := '0';
 signal n_result_old : std_logic := '0';
+signal z_result_latched : std_logic;
+signal n_result_latched : std_logic;
 signal operation_results : result_array;
 signal multiply_internal : std_logic_vector(31 downto 0);
 --signal result_intermediate : std_logic_vector(15 downto 0); -- Added so that the result can be read for Z & N.
@@ -90,27 +92,25 @@ begin
 	n_result_cur <= '1' when (in1(15) = '1') else '0';
 
 	-- Check whether we need to update the signals
-	z_result_old <= z_result_cur when (alu_mode = test_op) else z_result_old;
-	n_result_old <= n_result_cur when (alu_mode = test_op) else n_result_old;
+	z_result_old <= z_result_cur when (alu_mode = test_op) else z_result_latched;
+	n_result_old <= n_result_cur when (alu_mode = test_op) else n_result_latched;
 
 	-- Wire the output to the held result
 	z_flag <= z_result_old;
 	n_flag <= n_result_old;
 
---	process(clk)
---	begin
---		if rising_edge(clk) then
---			if (rst = '1') then
---				for i in 0 to 6 loop
---					operation_results(i) <= x"0000";
---				end loop;
---				z_result_cur <= '0';
---				n_result_cur <= '0';
---				z_result_old <= '0';
---				n_result_old <= '0';
---			end if;
---		end if;
---	end process;
+	process(clk)
+	begin
+		if rising_edge(clk) then
+			if (rst = '1') then
+				n_result_latched <= '1';
+				z_result_latched <= '0';
+			else
+				n_result_latched <= n_result_old;
+				z_result_latched <= z_result_old;
+			end if;
+		end if;
+	end process;
 
 end Behavioral;
 

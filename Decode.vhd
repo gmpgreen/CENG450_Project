@@ -76,7 +76,6 @@ signal ra_index_intrn : std_logic_vector(2 downto 0);
 signal rd_index1 : STD_LOGIC_VECTOR(2 downto 0);
 signal rd_index2 : STD_LOGIC_VECTOR(2 downto 0);
 signal instruction_intrn : STD_LOGIC_VECTOR(15 downto 0);
-signal instruction_old : STD_LOGIC_VECTOR(15 downto 0);
 signal branch_typ1_extn : STD_LOGIC_VECTOR (15 downto 0);
 signal branch_typ2_extn : STD_LOGIC_VECTOR (15 downto 0);
 
@@ -103,8 +102,6 @@ constant br_neg : std_logic_vector(6 downto 0) 		:= "1000100"; --uses ra
 constant br_zero : std_logic_vector(6 downto 0) 	:= "1000101"; --uses ra
 constant br_sub : std_logic_vector(6 downto 0) 		:= "1000110"; --uses ra
 constant rtn	: std_logic_vector(6 downto 0)		:= "1000111";
-
-signal debug : std_logic_vector(2 downto 0);
 
 begin
 

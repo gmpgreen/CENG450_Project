@@ -60,6 +60,7 @@ signal sub_ret : std_logic_vector(15 downto 0);
 signal reg_src : std_logic_vector(15 downto 0);
 signal mem_read : std_logic_vector(15 downto 0);
 signal output_inner : std_logic_vector(15 downto 0);
+signal output_latched : std_logic_vector(15 downto 0);
 signal input_inner : std_logic_vector(15 downto 0);
 signal input_inner_en : std_logic;
 signal load_imm_inner : std_logic_vector(7 downto 0);
@@ -96,7 +97,7 @@ begin
 		x"0000";
 		
 	-- Configure the output
-	output_inner <= alu_data when output_en_intrn = '1' else output_inner;
+	output_inner <= alu_data when output_en_intrn = '1' else output_latched;
 	output <= output_inner;
 
 	process(clk)
@@ -114,6 +115,7 @@ begin
 				input_inner_en <= '0';
 				load_imm_inner <= x"00";
 				output_en_intrn <= '0';
+				output_latched <= x"0000";
 			else
 				wr_mode <= Write_Mode;
 				wr_branch <= Wr_Back_Branch_En;
@@ -127,6 +129,7 @@ begin
 				load_imm_inner <= load_imm;
 				immediate_mode_inner <= immediate_mode;
 				output_en_intrn <= output_en;
+				output_latched <= output_inner;
 			end if;
 		end if;
 	end process;

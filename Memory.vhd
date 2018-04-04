@@ -84,7 +84,7 @@ signal imm_mode : std_logic;
 
 begin
 	
-	RAM : entity work.RAM port map(clk, mem_en, read_write, addr, write_data, 
+	RAM : entity work.RAM port map(rst, clk, mem_en, read_write, addr, write_data, 
 	rd_data_inner);
 	
 	addr <= reg_dest when (read_write = '1') else reg_src;
