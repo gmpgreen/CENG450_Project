@@ -52,29 +52,32 @@ begin
 
 	rw_enable_intrn <= RW_Enable when RAM_Enable = '1' else '0';
 	address_intrn <= Address when RAM_Enable = '1' else x"0000";
-
-	-- Write to memory
-	--RAM_memory(conv_integer(unsigned('0' & address_intrn(15 downto 1)))) <= 
-		--WR_Data when rw_enable_intrn = '1' else
-		--RAM_memory(conv_integer(unsigned('0' & address_intrn(15 downto 1))));
-		
-	-- Read data from memory
-	--RD_Data <= 
-		--RAM_memory(conv_integer(unsigned('0' & address_intrn(15 downto 1)))) when rw_enable_intrn = '0' else
-		--x"0000";
+--
+--	-- Write to memory
+--	RAM_memory(conv_integer(unsigned('0' & address_intrn(9 downto 1)))) <= 
+--		WR_Data when rw_enable_intrn = '1' else
+--		RAM_memory(conv_integer(unsigned('0' & address_intrn(9 downto 1))));
+--		
+--	-- Read data from memory
+--	RD_Data <= 
+--		RAM_memory(conv_integer(unsigned('0' & address_intrn(9 downto 1)))) when rw_enable_intrn = '0' else
+--		x"0000";
 		
 	process(clk)
+	variable addr : integer := 0;
 	begin
 		if falling_edge(clk) then
 			if rst = '1' then
 				RD_Data <= x"0000";
-			elsif RAM_Enable = '1' then
+			elsif RAM_Enable = '0' then
 				RD_Data <= x"0000";
 			elsif RW_Enable = '1' then
+				addr := conv_integer(unsigned('0' & address_intrn(9 downto 1)));
 				RD_Data <= x"0000";
-				RAM_memory(conv_integer(unsigned('0' & address_intrn(9 downto 1)))) <= WR_Data;
+				RAM_memory(addr) <= WR_Data;
 			elsif RW_Enable = '0' then
-				RD_Data <= RAM_memory(conv_integer(unsigned('0' & address_intrn(9 downto 1))));
+				addr := conv_integer(unsigned('0' & address_intrn(9 downto 1)));
+				RD_Data <= RAM_memory(addr);
 			end if;
 		end if;
 	end process;

@@ -41,8 +41,8 @@ ARCHITECTURE behavior OF Controller_TB IS
  
     COMPONENT Controller
     PORT(
-         clk : IN  std_logic;
-			disp_clk : in STD_LOGIC;
+         clk_external : IN  std_logic;
+			clk_internal : in STD_LOGIC;
          rst : IN  std_logic;
          an : OUT  std_logic_vector(3 downto 0);
          sseg : OUT  std_logic_vector(6 downto 0);
@@ -53,8 +53,8 @@ ARCHITECTURE behavior OF Controller_TB IS
     
 
    --Inputs
-   signal clk : std_logic := '0';
-	signal disp_clk : std_logic := '0';
+   signal clk_external : std_logic := '0';
+	signal clk_internal : std_logic := '0';
    signal rst : std_logic := '0';
    signal input : std_logic_vector(7 downto 0) := (others => '0');
 
@@ -64,14 +64,14 @@ ARCHITECTURE behavior OF Controller_TB IS
    signal output : std_logic_vector(7 downto 0);
 
    -- Clock period definitions
-   constant clk_period : time := 100 ns;
+   constant clk_period : time := 20 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
    uut: Controller PORT MAP (
-          clk => clk,
-			 disp_clk => disp_clk,
+          clk_external => clk_external,
+			 clk_internal => clk_internal,
           rst => rst,
           an => an,
           sseg => sseg,
@@ -82,13 +82,13 @@ BEGIN
    -- Clock process definitions
    clk_process :process
    begin
-		clk <= '0';
+		clk_external <= '0';
 		wait for clk_period/2;
-		clk <= '1';
+		clk_external <= '1';
 		wait for clk_period/2;
    end process;
  
-	disp_clk <= clk;
+	clk_internal <= clk_external;
 
    -- Stimulus process
    stim_proc: process
@@ -101,7 +101,7 @@ BEGIN
 
       -- insert stimulus here 
 		
-		input <= x"02"; -- R0
+		input <= x"40"; -- R0
 		wait for clk_period*2;
 		--input <= x"03"; -- R1
       wait for clk_period*2;

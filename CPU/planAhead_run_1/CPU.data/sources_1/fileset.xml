@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DARoots Version="1"
+		Minor="19">
+	<FileSet Name="sources_1"
+			Type="DesignSrcs"
+			RelSrcDir="$PSRCDIR/sources_1">
+		<Filter Type="Srcs"/>
+		<File Path="$PPRDIR/../../MUX2.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Barrel_Shift_Right.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Barrel_Shift_Left.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../ROM_VHDL.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Register_File.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../RAW_Handler.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../RAM.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../ALU.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Adder.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Writeback.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Memory.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Fetch.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Execute.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Decode.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Pipeline.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Display_Controller.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Clock_Prescaler.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<File Path="$PPRDIR/../../Controller.vhd">
+			<FileInfo>
+				<Attr Name="UsedInSynthesis"
+						Val="1"/>
+				<Attr Name="UsedInImplementation"
+						Val="1"/>
+				<Attr Name="UsedInSimulation"
+						Val="1"/>
+			</FileInfo>
+		</File>
+		<Config>
+			<Option Name="DesignMode"
+					Val="RTL"/>
+			<Option Name="TopModule"
+					Val="Controller"/>
+			<Option Name="TopLib"
+					Val="work"/>
+			<Option Name="TopArchitecture"
+					Val="Behavioral"/>
+			<Option Name="TopRTLFile"
+					Val="$PPRDIR/../../Controller.vhd"/>
+			<Option Name="TopAutoSet"
+					Val="TRUE"/>
+		</Config>
+	</FileSet>
+</DARoots>

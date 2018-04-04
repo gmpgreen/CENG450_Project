@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# PlanAhead v13.4 (64-bit)
+# Build 157570 by hdbuild on Fri Dec 16 13:06:31 MST 2011
+# Start of session at: Wed Apr 04 12:51:11 2018
+# Process ID: 6256
+# Log file: C:/Users/lymacasm.UVIC/CENG450_Project/CPU/planAhead_run_1/planAhead.log
+# Journal file: C:/Users/lymacasm.UVIC/CENG450_Project/CPU/planAhead_run_1/planAhead.jou
+#-----------------------------------------------------------
+start_gui
+source C:/Users/lymacasm.UVIC/CENG450_Project/CPU/pa.fromHdl.tcl
+exit
+stop_gui

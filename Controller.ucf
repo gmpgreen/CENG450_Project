@@ -4,7 +4,6 @@ NET "an[0]" LOC = F17;
 NET "an[1]" LOC = H17;
 NET "an[2]" LOC = C18;
 NET "an[3]" LOC = F15;
-NET "clk" LOC = U9;
 NET "input[0]" LOC = G18;
 NET "input[1]" LOC = H18;
 NET "input[2]" LOC = K18;
@@ -33,10 +32,8 @@ NET "output[6]" LOC = E4;
 NET "output[7]" LOC = P4;
 
 
-NET "disp_clk" LOC = B8;
 
+# PlanAhead Generated physical constraints 
 
-NET "disp_clk" DRIVE = 12;
-
-
-NET "garbage" LOC = P9;
+NET "clk_external" LOC = U9;
+NET "clk_internal" LOC = B8;

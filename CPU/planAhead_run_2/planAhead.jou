@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# PlanAhead v13.4 (64-bit)
+# Build 157570 by hdbuild on Fri Dec 16 13:06:31 MST 2011
+# Start of session at: Wed Apr 04 12:46:47 2018
+# Process ID: 4780
+# Log file: C:/Users/lymacasm.UVIC/CENG450_Project/CPU/planAhead_run_2/planAhead.log
+# Journal file: C:/Users/lymacasm.UVIC/CENG450_Project/CPU/planAhead_run_2/planAhead.jou
+#-----------------------------------------------------------
+start_gui
+source C:/Users/lymacasm.UVIC/CENG450_Project/CPU/pa.fromHdl.tcl
+-force
+create_project -force -name CPU -dir "C:/Users/lymacasm.UVIC/CENG450_Project/CPU/planAhead_run_2" -part xc3s1200efg320-5
+exit
+stop_gui

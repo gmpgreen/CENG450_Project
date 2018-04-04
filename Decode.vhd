@@ -131,7 +131,7 @@ with instruction_intrn(15 downto 9) select
 -- Check if we're reading from rd_idx2
 with instruction_intrn(15 downto 9) select
 	rd_enable_2 <= 
-		'1' when add_op | sub_op | mul_op | nand_op | mov | load_imm | load,
+		'1' when add_op | sub_op | mul_op | nand_op | mov | load_imm | load | store,
 		'0' when others;
 		
 -- Get the RAW countdown for the current read index

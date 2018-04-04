@@ -30,9 +30,8 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity Controller is
-    Port ( clk : in  STD_LOGIC;
-			  disp_clk : in STD_LOGIC;
-			  garbage : out STD_LOGIC;
+    Port ( clk_external : in  STD_LOGIC;
+			  clk_internal : in STD_LOGIC;
            rst : in  STD_LOGIC;
            an : out  STD_LOGIC_VECTOR (3 downto 0);
            sseg : out  STD_LOGIC_VECTOR (6 downto 0);
@@ -42,12 +41,14 @@ end Controller;
 
 architecture Behavioral of Controller is
 
+signal rst_internal : std_logic;
+
 signal sign_ext : std_logic_vector(7 downto 0);
 signal input_extended : std_logic_vector(15 downto 0);
 signal output_extended : std_logic_vector(15 downto 0);
 
 signal count_tracker : unsigned(15 downto 0);
-signal disp_true_clk : std_logic;
+signal display_clk : std_logic;
 
 begin
 	
@@ -57,31 +58,21 @@ begin
 	-- Sign extend the input
 	input_extended <= sign_ext & input;
 
-	Processor : entity work.pipeline port map(clk, rst, input_extended, output_extended);
+	Processor : entity work.pipeline port map(clk_external, rst_internal, input_extended, output_extended);
 	
 	output <= output_extended(7 downto 0);
 	
-	sseg_display : entity work.display_controller port map(disp_true_clk, rst, 
+	sseg_display : entity work.display_controller port map(display_clk, rst_internal, 
 		output_extended(15 downto 12), output_extended(11 downto 8), 
 		output_extended(7 downto 4), output_extended(3 downto 0),
 		an, sseg);
 		
-	garbage <= disp_clk;
-		
-	process(disp_clk)
+	Prescaler : entity work.clock_prescaler port map(clk_internal, rst_internal, x"20000", display_clk);
+	
+	process(clk_external)
 	begin
-		if rising_edge(disp_clk) then
-			if rst = '1' then
-				count_tracker <= (others => '0');
-				disp_true_clk <= '0';
-			else
-				if count_tracker = x"30D40" then
-					disp_true_clk <= not disp_true_clk;
-					count_tracker <= (others => '0');
-				else
-					count_tracker <= count_tracker + "1";
-				end if;
-			end if;
+		if falling_edge(clk_external) then
+			rst_internal <= rst;
 		end if;
 	end process;
 
