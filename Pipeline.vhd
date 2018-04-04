@@ -38,6 +38,8 @@ end Pipeline;
 
 architecture Behavioral of Pipeline is
 
+signal output_internal : std_logic_vector(15 downto 0);
+
 -- Freeze signals
 signal frz_fetch : std_logic;
 signal frz_decode : std_logic;
@@ -146,7 +148,7 @@ begin
 	-- Setup the writeback stage
 	Writeback : entity work.writeback port map(rst, clk, wrback_mode_m, ra_idx_m, alu_result_m, 
 		mem_read_data, wrback_en_m, subroutine_ret_m, src_reg, wr_en, wr_idx, wr_data, output_en_m, 
-		output, input_en_m, input_m, ld_imm_m, imm_mode_m); 
+		output_internal, input_en_m, input_m, ld_imm_m, imm_mode_m); 
 		
 	-- Reset the decode, execute and branch latches when a branch is taken
 	-- Insert bubble in execute when RAW hazard is detected
@@ -161,6 +163,8 @@ begin
 	rst_memory <= 
 		raw_hazard_e when raw_hazard_m = '1' else 
 		rst;
+		
+	output <= PC_f;
 	
 	-- Freeze the fetch clock when RAW hazard is detected
 	-- For detection: raw_hazard_e AND raw_hazard_m

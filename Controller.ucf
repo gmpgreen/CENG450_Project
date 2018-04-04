@@ -1,0 +1,42 @@
+
+
+NET "an[0]" LOC = F17;
+NET "an[1]" LOC = H17;
+NET "an[2]" LOC = C18;
+NET "an[3]" LOC = F15;
+NET "clk" LOC = U9;
+NET "input[0]" LOC = G18;
+NET "input[1]" LOC = H18;
+NET "input[2]" LOC = K18;
+NET "input[3]" LOC = K17;
+NET "input[4]" LOC = L14;
+NET "input[5]" LOC = L13;
+NET "input[6]" LOC = N17;
+NET "input[7]" LOC = R17;
+NET "rst" LOC = B18;
+NET "sseg[0]" LOC = L18;
+NET "sseg[1]" LOC = F18;
+NET "sseg[2]" LOC = D17;
+NET "sseg[3]" LOC = D16;
+NET "sseg[4]" LOC = G14;
+NET "sseg[5]" LOC = J17;
+NET "sseg[6]" LOC = H14;
+
+
+NET "output[0]" LOC = J14;
+NET "output[1]" LOC = J15;
+NET "output[2]" LOC = K15;
+NET "output[3]" LOC = K14;
+NET "output[4]" LOC = E16;
+NET "output[5]" LOC = P16;
+NET "output[6]" LOC = E4;
+NET "output[7]" LOC = P4;
+
+
+NET "disp_clk" LOC = B8;
+
+
+NET "disp_clk" DRIVE = 12;
+
+
+NET "garbage" LOC = P9;

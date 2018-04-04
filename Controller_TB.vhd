@@ -2,15 +2,15 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   17:21:56 03/14/2018
+-- Create Date:   21:16:12 04/03/2018
 -- Design Name:   
--- Module Name:   C:/Users/lymacasm.UVIC.000/CENG450_Project/Pipeline_TB.vhd
--- Project Name:  RegFile_ALU
+-- Module Name:   C:/Users/lymacasm/CENG450_Project/Controller_TB.vhd
+-- Project Name:  CPU
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: Pipeline
+-- VHDL Test Bench Created by ISE for module: Controller
 -- 
 -- Dependencies:
 -- 
@@ -32,40 +32,49 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY Pipeline_TB IS
-END Pipeline_TB;
+ENTITY Controller_TB IS
+END Controller_TB;
  
-ARCHITECTURE behavior OF Pipeline_TB IS 
+ARCHITECTURE behavior OF Controller_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT Pipeline
+    COMPONENT Controller
     PORT(
          clk : IN  std_logic;
+			disp_clk : in STD_LOGIC;
          rst : IN  std_logic;
-         input : IN  std_logic_vector(15 downto 0);
-         output : OUT  std_logic_vector(15 downto 0)
+         an : OUT  std_logic_vector(3 downto 0);
+         sseg : OUT  std_logic_vector(6 downto 0);
+         input : IN  std_logic_vector(7 downto 0);
+         output : OUT  std_logic_vector(7 downto 0)
         );
     END COMPONENT;
     
 
    --Inputs
    signal clk : std_logic := '0';
+	signal disp_clk : std_logic := '0';
    signal rst : std_logic := '0';
-   signal input : std_logic_vector(15 downto 0) := (others => '0');
+   signal input : std_logic_vector(7 downto 0) := (others => '0');
 
  	--Outputs
-   signal output : std_logic_vector(15 downto 0);
+   signal an : std_logic_vector(3 downto 0);
+   signal sseg : std_logic_vector(6 downto 0);
+   signal output : std_logic_vector(7 downto 0);
 
    -- Clock period definitions
-   constant clk_period : time := 50 ns;
+   constant clk_period : time := 100 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: Pipeline PORT MAP (
+   uut: Controller PORT MAP (
           clk => clk,
+			 disp_clk => disp_clk,
           rst => rst,
+          an => an,
+          sseg => sseg,
           input => input,
           output => output
         );
@@ -79,35 +88,35 @@ BEGIN
 		wait for clk_period/2;
    end process;
  
+	disp_clk <= clk;
 
    -- Stimulus process
    stim_proc: process
    begin		
       -- hold reset state for 100 ns.
 		rst <= '1';
-		wait for 100 ns;
+      wait for 100 ns;	
       wait for clk_period*10;
 		rst <= '0';
-		
-		-- Initialize the register file
-		input <= x"0002"; -- R0
-		wait for clk_period*2;
-		input <= x"0003"; -- R1
-      wait for clk_period*2;
-		input <= x"ABCD"; -- R2
-      wait for clk_period*2;
-		input <= x"0004"; -- R3 /will change to R4
-      wait for clk_period*2;
-		input <= x"0012"; -- R4
-      wait for clk_period*2;
-		input <= x"0001"; -- R5
-      wait for clk_period*2;
-		input <= x"0005"; -- R6
-      wait for clk_period*2;
-		input <= x"0006"; -- R7
-		wait for clk_period*2;
-		
+
       -- insert stimulus here 
+		
+		input <= x"02"; -- R0
+		wait for clk_period*2;
+		--input <= x"03"; -- R1
+      wait for clk_period*2;
+		--input <= x"CD"; -- R2
+      wait for clk_period*2;
+		--input <= x"04"; -- R3 /will change to R4
+      wait for clk_period*2;
+		--input <= x"12"; -- R4
+      wait for clk_period*2;
+		--input <= x"01"; -- R5
+      wait for clk_period*2;
+		--input <= x"05"; -- R6
+      wait for clk_period*2;
+		--input <= x"06"; -- R7
+		wait for clk_period*2;
 
       wait;
    end process;

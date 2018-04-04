@@ -1,0 +1,37 @@
+
+# PlanAhead Generated physical constraints 
+
+NET "an[0]" LOC = F15;
+NET "an[1]" LOC = C18;
+NET "an[2]" LOC = H17;
+NET "an[3]" LOC = F17;
+NET "clk" LOC = U9;
+NET "input[0]" LOC = G18;
+NET "input[1]" LOC = H18;
+NET "input[2]" LOC = K18;
+NET "input[3]" LOC = K17;
+NET "input[4]" LOC = L14;
+NET "input[5]" LOC = L13;
+NET "input[6]" LOC = N17;
+NET "input[7]" LOC = R17;
+NET "rst" LOC = B18;
+NET "sseg[0]" LOC = H14;
+NET "sseg[1]" LOC = J17;
+NET "sseg[2]" LOC = G14;
+NET "sseg[3]" LOC = D16;
+NET "sseg[4]" LOC = D17;
+NET "sseg[5]" LOC = F18;
+NET "sseg[6]" LOC = L18;
+
+# PlanAhead Generated IO constraints 
+
+NET "input[8]" IOSTANDARD = LVCMOS25;
+NET "input[8]" DRIVE = 12;
+NET "input[8]" PULLDOWN;
+NET "input[9]" PULLDOWN;
+NET "input[10]" PULLDOWN;
+NET "input[11]" PULLDOWN;
+NET "input[12]" PULLDOWN;
+NET "input[13]" PULLDOWN;
+NET "input[14]" PULLDOWN;
+NET "input[15]" PULLDOWN;
