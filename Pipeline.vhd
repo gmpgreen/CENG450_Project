@@ -164,8 +164,9 @@ begin
 		raw_hazard_e when raw_hazard_m = '1' else 
 		rst;
 		
-	--output <= instruction(7 downto 0) & pc_f(7 downto 1) & branch_enable_b;
-	output <= output_internal;
+	output <= instruction(7 downto 0) & pc_f(7 downto 1) & branch_enable_b;
+	--output <= pc_f(15 downto 1) & branch_enable_f;
+	--output <= output_internal;
 	
 	-- Freeze the fetch clock when RAW hazard is detected
 	-- For detection: raw_hazard_e AND raw_hazard_m

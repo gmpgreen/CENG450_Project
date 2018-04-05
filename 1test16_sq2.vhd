@@ -11,7 +11,7 @@ use IEEE.STD_LOGIC_ARITH.all;
 entity ROM_VHDL is
     port(
          clk      : in  std_logic;
-         addr     : in  std_logic_vector (6 downto 0);
+         addr     : in  std_logic_vector (15 downto 0);
          data     : out std_logic_vector (15 downto 0)
          );
 end ROM_VHDL;
@@ -40,10 +40,10 @@ architecture BHV of ROM_VHDL is
 	016 => "0000010011011010", -- Sub r3,r3,r2	-- r3=r3-r2: Checking the difference between the square of the two numbers
 	017 => "0000000000000000", -- NOP
 	018 => "0000000000000000", -- NOP
-	019 => "0010001011100000", -- STORE r3,@r4	-- Store the content of r3 into the address indexed by the value of r4=2 
+	019 => "0010001100011000", -- STORE @r4,r3	-- Store the content of r3 into the address indexed by the value of r4=2 
 	020 => "0000001010000001", -- Add r2,r0,r1	-- r2=r0+r1
 	021 => "0000101100000001", -- SHL r4#1	-- r4=2*r4: r4=4 as another even destination for the second Store
-	022 => "0010001010100000", -- STORE r2,@r4	-- Store the content of r2 into the address indexed by the value of r4=4 
+	022 => "0010001100010000", -- STORE @r4,r2	-- Store the content of r2 into the address indexed by the value of r4=4 
 	023 => "0000000000000000", -- NOP
 	024 => "0000000000000000", -- NOP
 	025 => "0010000010100000", -- LOAD r2,@r4	-- Load the content of the address indexed by the value of r4=4 into r2 
@@ -68,7 +68,7 @@ p1:    process (clk)
 	 variable add_in : integer := 0;
     begin
         if rising_edge(clk) then
-					 add_in := conv_integer(unsigned(addr));
+					 add_in := conv_integer(unsigned('0' & addr(15 downto 1)));
                 data <= rom_content(add_in);
         end if;
     end process;

@@ -134,6 +134,7 @@ signal input_en : std_logic;
 signal wr_mode : std_logic_vector(2 downto 0);
 signal N : std_logic;
 signal Z : std_logic;
+signal mem_mode : std_logic_vector(1 downto 0);
 
 begin
 
@@ -195,6 +196,8 @@ begin
 		N when (branch_mode_intrn = br_n) else
 		'1';
 		
+	Mem_mode_out <= mem_mode;
+		
 	-- Set branch enable output bit
 	branch_enable <= branch_mode_en_intrn when (branch_taken = '1') else '0';
 	branch_enable_intrn <= branch_mode_en_intrn when (branch_taken = '1') else '0';
@@ -228,7 +231,7 @@ begin
 				in2 <= x"0000";
 				c1 <= x"0000";
 				Wr_Back_Mode_Out <= "000";
-				Mem_Mode_Out <= "00";
+				mem_mode <= "00";
 				load_imm <= x"00";
 				Load_Imm_Out <= x"00";
 				Immediate_Mode_Out <= '0';
@@ -262,6 +265,8 @@ begin
 				wrback_mem <= writeback_memory;
 				wrback_wrback <= writeback_writeback;
 				
+				mem_mode <= "00";
+				
 				-- There is a possibility that a RAW signal will writeback while 
 				-- we're waiting. If this is the case, we will need to keep a copy of
 				-- it so that we can still use it, because Decode has forgotten about
@@ -285,7 +290,7 @@ begin
 				in2 <= input2;
 				c1 <= x"000" & shift;
 				Wr_Back_Mode_Out <= Wr_Back_Mode_In;
-				Mem_Mode_Out <= Mem_Mode_In;
+				mem_mode <= Mem_Mode_In;
 				load_imm <= Load_Imm_In;
 				Load_Imm_Out <= Load_Imm_In;
 				Immediate_Mode_Out <= Imediate_Mode_In;

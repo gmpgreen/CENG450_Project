@@ -101,7 +101,7 @@ BEGIN
 
       -- insert stimulus here 
 		
-		input <= x"40"; -- R0
+		input <= x"06"; -- R0
 		wait for clk_period*2;
 		--input <= x"03"; -- R1
       wait for clk_period*2;
