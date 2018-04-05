@@ -118,7 +118,7 @@ with instruction_intrn(15 downto 9) select
 		'0' when others;				
 
 -- Check for RAW condition
-raw_handler : entity work.raw_handler port map(rst, clk, write_future, ra_index_intrn, 
+raw_handler : entity work.raw_handler port map(rst, clk, frz, write_future, ra_index_intrn, 
 	rd_index1, rd_index2, raw_1, raw_2);
 		
 -- Check if we're reading from rd_idx1

@@ -32,6 +32,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity RAW_Handler is
     Port ( rst : in  STD_LOGIC;
            clk : in  STD_LOGIC;
+			  frz : in	STD_LOGIC;
 			  wr_en : in STD_LOGIC;
            wr_idx : in  STD_LOGIC_VECTOR (2 downto 0);
            rd_idx1 : in  STD_LOGIC_VECTOR (2 downto 0);
@@ -54,6 +55,7 @@ signal raw_start : std_logic_vector(7 downto 0);
 -- 2 -> 1
 -- 3 -> 2
 constant subtract_lookup : lookup := ("00", "00", "01", "10");
+constant freeze_lookup : lookup := ("00", "00", "01", "11");
 
 begin
 
@@ -83,7 +85,7 @@ begin
 				end loop;
 				
 			-- Update the raw_tracker
-			else
+			elsif(frz = '0') then
 				for i in 0 to 7 loop
 					-- Go to state 3 if raw_start has been set for this index
 					if raw_start(i) = '1' then
@@ -92,6 +94,17 @@ begin
 					-- Otherwise, go to next state, as defined in the comment above subtract_lookup
 					else
 						raw_tracker(i) <= subtract_lookup(to_integer(unsigned(raw_tracker(i))));
+					end if;
+				end loop;
+			elsif(frz = '1') then
+				for i in 0 to 7 loop
+					-- Go to state 3 if raw_start has been set for this index
+					if raw_start(i) = '1' then
+						raw_tracker(i) <= "11";
+					
+					-- Otherwise, go to next state, as defined in the comment above subtract_lookup
+					else
+						raw_tracker(i) <= freeze_lookup(to_integer(unsigned(raw_tracker(i))));
 					end if;
 				end loop;
 			end if;

@@ -128,7 +128,7 @@ begin
 				input_out <= x"0000";
 				sub_ret <= x"0000";
 				input_inner <= x"0000";
-				alu_data <= x"0000";
+				alu_data <= ALU_Result_In;
 				wr_branch <= '0';
 				input_en <= '0';
 				wr_mode <= "000";
