@@ -52,6 +52,7 @@ architecture Behavioral of Fetch is
 	signal instr_addr : std_logic_vector(15 downto 0);
 	signal clk_rom : std_logic;
 	signal instruction_intrn : std_logic_vector(15 downto 0);
+	signal clk_rom_en : std_logic;
 
 begin
 
@@ -75,7 +76,7 @@ begin
 	-- Update output address
 	instruction_addr <= PC_to_read;
 	
-	clk_rom <= clk when frz = '0' else '0';
+	clk_rom <= clk when clk_rom_en = '1' else '0';
 	
 	process(clk)
 	begin
@@ -87,12 +88,16 @@ begin
 				input_out <= x"0000";
 				br_addr <= x"0000";
 				br_en <= '0';
+				clk_rom_en <= '0';
 			elsif (frz = '0') then
 				PC_to_read <= instr_addr;
 				PC <= PC_incr;
 				input_out <= input_in;
 				br_addr <= branch_address;
 				br_en <= branch_enable;
+				clk_rom_en <= '1';
+			elsif (frz = '1') then
+				clk_rom_en <= '0';
 			end if;
 		end if;
 	end process;
