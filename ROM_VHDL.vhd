@@ -94,7 +94,7 @@ p1:    process (clk)
         if rising_edge(clk) then
 					add_in := conv_integer(unsigned(addr));
 					data(7 downto 0) <= rom_content(add_in+1);
-					data(15 downto 8) <= rom_content(add_in);					 
+					data(15 downto 8) <= rom_content(add_in);	
         end if;
 		  
     end process;

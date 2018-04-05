@@ -40,6 +40,9 @@ architecture Behavioral of Pipeline is
 
 signal output_internal : std_logic_vector(15 downto 0);
 
+-- Clock signals
+signal clk_fetch : std_logic;
+
 -- Freeze signals
 signal frz_fetch : std_logic;
 signal frz_decode : std_logic;

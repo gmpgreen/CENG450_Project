@@ -52,7 +52,8 @@ architecture Behavioral of Fetch is
 	signal instr_addr : std_logic_vector(15 downto 0);
 	signal clk_rom : std_logic;
 	signal instruction_intrn : std_logic_vector(15 downto 0);
-	signal clk_rom_en : std_logic;
+	signal rom_en : std_logic;
+	signal froze : std_logic;
 
 begin
 
@@ -67,16 +68,16 @@ begin
 	
 	-- Get instruction from ROM
 	--rom : entity work.rom port map(clk, instr_addr, instruction);
-	rom : entity work.ROM_VHDL port map(clk_rom, instr_addr, instruction_intrn);
-	instruction <= instruction_intrn when rst = '0' else x"0000";
+	rom : entity work.ROM_VHDL port map(clk, instr_addr, instruction_intrn);
+	instruction <= x"0000" when froze = '1' else
+						x"0000" when rst = '1' else
+						instruction_intrn;
 	
 	-- Prepare the incremented PC
 	PC_Adder : entity work.adder_16bit port map(instr_addr, x"0002", PC_incr);
 	
 	-- Update output address
 	instruction_addr <= PC_to_read;
-	
-	clk_rom <= clk when clk_rom_en = '1' else '0';
 	
 	process(clk)
 	begin
@@ -88,16 +89,18 @@ begin
 				input_out <= x"0000";
 				br_addr <= x"0000";
 				br_en <= '0';
-				clk_rom_en <= '0';
+				rom_en <= '1';
+				froze <= '0';
 			elsif (frz = '0') then
 				PC_to_read <= instr_addr;
 				PC <= PC_incr;
 				input_out <= input_in;
 				br_addr <= branch_address;
 				br_en <= branch_enable;
-				clk_rom_en <= '1';
+				froze <= '0';
 			elsif (frz = '1') then
-				clk_rom_en <= '0';
+				PC <= PC_to_read; -- PC_to_read = PC - 2
+				froze <= '1';
 			end if;
 		end if;
 	end process;

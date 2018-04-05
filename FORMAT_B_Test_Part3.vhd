@@ -25,16 +25,17 @@ architecture BHV of ROM_VHDL is
 	001 => "0100001001000000", -- IN R1 , 03  -- The values to be loaded into the corresponding resgister.
 	002 => "0100001010000000", -- IN R2 , 01
 	003 => "0100001011000000", -- IN R3 , 05  --  End of initialization
-	004 => "0000011110000011", -- MUL R6, R0, R3
-	005 => "1000000111111111", -- BRR -1
+	004 => "0000011110000011", -- MUL R6, R0, R3	    
+	005 => "0100000110000000", -- OUT r6		
+	--006 => "1000000111111010", -- BRR -6 -- Back to beginning
 	others => x"0000" ); -- NOP
 begin
 
 p1:    process (clk)
 	 variable add_in : integer := 0;
     begin
-        if rising_edge(clk) then
-					 add_in := conv_integer(unsigned(addr));
+			if rising_edge(clk) then
+					 add_in := conv_integer(unsigned('0' & addr(15 downto 1)));
                 data <= rom_content(add_in);
         end if;
     end process;
