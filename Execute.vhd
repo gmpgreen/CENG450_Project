@@ -33,6 +33,7 @@ entity Execute is
     Port ( rst : in  STD_LOGIC;
            clk : in  STD_LOGIC;
 			  frz : in 	STD_LOGIC;
+			  alu_rst : in STD_LOGIC;
 			  ALU_Mode : in  STD_LOGIC_VECTOR (2 downto 0);
            input1 : in  STD_LOGIC_VECTOR (15 downto 0);
            input2 : in  STD_LOGIC_VECTOR (15 downto 0);
@@ -138,7 +139,7 @@ signal mem_mode : std_logic_vector(1 downto 0);
 
 begin
 
-	ALU : entity work.alu port map(muxed_in1, muxed_in2, alu_mode_buf, clk, rst, alu_result_buf, Z, N);
+	ALU : entity work.alu port map(muxed_in1, muxed_in2, alu_mode_buf, clk, alu_rst, alu_result_buf, Z, N);
 	
 	-- Used for both result and output
 	ALU_Result <= alu_result_buf when output_en = '0' else muxed_in1;

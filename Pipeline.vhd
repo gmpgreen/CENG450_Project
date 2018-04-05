@@ -133,7 +133,7 @@ begin
 		output_en_d, input_en_d, input_f, input_d, raw_pos_1, raw_pos_2);
 		
 	-- Setup the execute stage
-	Execute : entity work.execute port map(rst_execute, clk, frz_execute, alu_mode, rd_data1, rd_data2, shift, alu_result_e,
+	Execute : entity work.execute port map(rst_execute, clk, frz_execute, rst, alu_mode, rd_data1, rd_data2, shift, alu_result_e,
 		ra_idx_d, ra_idx_e, mem_mode_d, mem_mode_e, imm_mode_d, imm_mode_e, wrback_mode_d, wrback_mode_e,
 		ld_imm_d, ld_imm_e, reg1_val, reg2_val, output_en_d, output_en_e, input_en_d, input_en_e, 
 		input_d, input_e, raw_hazard_e, raw_pos_1, raw_pos_2, writeback_m, wr_data, writeback_e, writeback_e, PC_d, 

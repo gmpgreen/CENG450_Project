@@ -103,7 +103,7 @@ begin
 	begin
 		if rising_edge(clk) then
 			if (rst = '1') then
-				n_result_latched <= '1';
+				n_result_latched <= '0';
 				z_result_latched <= '0';
 			else
 				n_result_latched <= n_result_old;
